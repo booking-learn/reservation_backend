@@ -1,4 +1,4 @@
-package ca.reservation_backend;
+package ca.vetClinic;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

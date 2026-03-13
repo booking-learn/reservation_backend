@@ -1,4 +1,4 @@
-package ca.reservation_backend;
+package ca.vetClinic;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
