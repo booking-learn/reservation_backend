@@ -1,4 +1,9 @@
 package ca.vetClinic.infra.persistence;
 
-public interface UserRepository {
+import ca.vetClinic.infra.entity.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.UUID;
+
+public interface UserRepository extends JpaRepository<UserEntity, UUID> {
 }
