@@ -1,16 +1,16 @@
-package ca.vetClinic.domain.service;
+package ca.vetClinic.domain.repository;
 
 import ca.vetClinic.domain.model.User;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface UserService {
+public interface UserRepository {
 	List<User> findAll();
 
 	User findById(UUID id);
 
 	void save(User user);
 
-	void deleteById(UUID id);
+	void delete(UUID id);
 }
