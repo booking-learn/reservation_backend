@@ -1,9 +1,10 @@
-package ca.vetClinic.infra.repository;
+package ca.vetClinic.infra.repository.implementation;
 
 import ca.vetClinic.domain.exception.NotFoundException;
 import ca.vetClinic.domain.model.Employe;
 import ca.vetClinic.domain.repository.EmployeRepository;
 import ca.vetClinic.infra.mapper.EmployeMapper;
+import ca.vetClinic.infra.repository.jpa.EmployeJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -28,11 +29,6 @@ public class EmployeRepositoryImpl implements EmployeRepository {
 	}
 
 	@Override
-	public Optional<Employe> findByEmail(String email) {
-		return jpaRepository.findByEmail(email).map(mapper::toDomain);
-	}
-
-	@Override
 	public void save(Employe employe) {
 		jpaRepository.save(mapper.toEntity(employe));
 	}
@@ -40,5 +36,11 @@ public class EmployeRepositoryImpl implements EmployeRepository {
 	@Override
 	public void delete(UUID id) {
 		jpaRepository.deleteById(id);
+	}
+
+	@Override
+	public Employe findByAccountId(UUID id) {
+		return jpaRepository.findByAccountId(id).map(mapper::toDomain)
+				.orElseThrow(() -> new NotFoundException("accountId"));
 	}
 }

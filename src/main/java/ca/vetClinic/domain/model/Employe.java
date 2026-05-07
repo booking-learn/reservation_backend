@@ -4,28 +4,29 @@ import java.util.UUID;
 
 public class Employe {
 	private UUID id;
-
+	private UUID accountId;
 	private String firstName;
 	private String lastName;
 
-    private String phoneNumber;
+	private String phoneNumber;
 
-	public Employe(UUID id, String firstName, String lastName, String phoneNumber) {
+	public Employe(UUID id, UUID accountId, String firstName, String lastName, String phoneNumber) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
+		this.phoneNumber = phoneNumber;
+		this.accountId = accountId;
 	}
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 
-    public UUID getId() {
+	public UUID getId() {
 		return id;
 	}
 
@@ -52,5 +53,11 @@ public class Employe {
 	public void setEmail(String email) {
 	}
 
+	public UUID getAccountId() {
+		return accountId;
+	}
 
+	public void setAccountId(UUID accountId) {
+		this.accountId = accountId;
+	}
 }

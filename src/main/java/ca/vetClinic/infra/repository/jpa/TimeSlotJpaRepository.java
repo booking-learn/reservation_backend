@@ -1,4 +1,4 @@
-package ca.vetClinic.infra.repository;
+package ca.vetClinic.infra.repository.jpa;
 
 import ca.vetClinic.infra.entity.TimeSlotEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,8 +1,7 @@
 package ca.vetClinic.infra.security;
 
-import ca.vetClinic.domain.model.Employe;
-import ca.vetClinic.domain.model.Role;
-import ca.vetClinic.domain.model.User;
+import ca.vetClinic.domain.model.Account;
+import ca.vetClinic.domain.enumerator.Role;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,12 +21,8 @@ public class UserPrincipal implements UserDetails {
 	private final String password;
 	private final Role role;
 
-	public static UserPrincipal fromUser(User user) {
-		return new UserPrincipal(user.getId(), user.getEmail(), user.getPassword(), Role.USER);
-	}
-
-	public static UserPrincipal fromEmployee(Employe employee) {
-		return new UserPrincipal(employee.getId(), employee.getEmail(), employee.getPassword(), employee.getRole());
+	public static UserPrincipal fromAccount(Account account) {
+		return new UserPrincipal(account.getId(), account.getEmail(), account.getPassword(), account.getRole());
 	}
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

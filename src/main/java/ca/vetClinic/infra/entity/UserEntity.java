@@ -14,16 +14,16 @@ import java.util.UUID;
 @Table(name = "users")
 public class UserEntity {
 	@Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
 	private String firstName;
 	private String lastName;
 	private String phoneNumber;
 	@CreationTimestamp
 	private Instant userCreatedAt;
-    @OneToOne
-    @JoinColumn(name = "account_id")
-    private AccountEntity account;
+	@OneToOne
+	@JoinColumn(name = "account_id")
+	private AccountEntity account;
 	public UserEntity(String firstName, String lastName, String phoneNumber) {
 		this.firstName = firstName;
 		this.lastName = lastName;

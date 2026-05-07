@@ -1,6 +1,6 @@
 package ca.vetClinic.infra.entity;
 
-import ca.vetClinic.domain.model.Role;
+import ca.vetClinic.domain.enumerator.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

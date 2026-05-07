@@ -1,6 +1,5 @@
 package ca.vetClinic.infra.entity;
 
-import ca.vetClinic.domain.model.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,20 +15,19 @@ import java.util.UUID;
 public class EmployeEntity {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
 	private String firstName;
 	private String lastName;
 	private String phoneNumber;
-    @OneToOne
-    @JoinColumn(name = "account_id")
-    private AccountEntity account;
+	@OneToOne
+	@JoinColumn(name = "account_id")
+	private AccountEntity account;
 
 	public EmployeEntity() {
 	}
 
-	public EmployeEntity(String firstName, String lastName,
-			String phoneNumber) {
+	public EmployeEntity(String firstName, String lastName, String phoneNumber) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
