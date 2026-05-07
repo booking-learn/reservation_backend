@@ -10,32 +10,28 @@ import java.util.UUID;
 @Setter
 @Getter
 @Entity
-@Table(name = "employee")
+@Table(name = "employees")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
 public class EmployeEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
 	private String firstName;
 	private String lastName;
-	private String email;
-	private String password;
-	@Enumerated(EnumType.STRING)
-	private Role role;
 	private String phoneNumber;
+    @OneToOne
+    @JoinColumn(name = "account_id")
+    private AccountEntity account;
 
 	public EmployeEntity() {
 	}
 
-	public EmployeEntity(String firstName, String lastName, String email, String password, Role role,
+	public EmployeEntity(String firstName, String lastName,
 			String phoneNumber) {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.role = role;
 		this.phoneNumber = phoneNumber;
 	}
 

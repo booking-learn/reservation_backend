@@ -11,24 +11,22 @@ import java.util.UUID;
 @Setter
 @Getter
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class UserEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
 	private String firstName;
 	private String lastName;
-	private String email;
-	private String password;
 	private String phoneNumber;
 	@CreationTimestamp
 	private Instant userCreatedAt;
-
-	public UserEntity(String firstName, String lastName, String email, String password, String phoneNumber) {
+    @OneToOne
+    @JoinColumn(name = "account_id")
+    private AccountEntity account;
+	public UserEntity(String firstName, String lastName, String phoneNumber) {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
 		this.phoneNumber = phoneNumber;
 	}
 

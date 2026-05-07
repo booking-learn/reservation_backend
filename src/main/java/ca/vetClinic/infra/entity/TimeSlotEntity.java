@@ -11,7 +11,7 @@ import java.util.UUID;
 @Setter
 @Getter
 @Entity
-@Table(name = "timeSlot")
+@Table(name = "timeSlots")
 public class TimeSlotEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
