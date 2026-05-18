@@ -18,9 +18,8 @@ public class JwtProvider {
 
 	public String generateToken(UserPrincipal userPrincipal) {
 		SecretKey key = jwtKeyProvider.generate();
-		return Jwts.builder().subject(userPrincipal.getId().toString()).claim("email", userPrincipal.getEmail())
-				.claim("role", userPrincipal.getRole().name()).issuedAt(new Date())
-				.expiration(new Date(System.currentTimeMillis() + jwtProperties.getExpiration())).signWith(key)
-				.compact();
+		return Jwts.builder().subject(userPrincipal.getEmail()).claim("role", userPrincipal.getRole().name())
+				.issuedAt(new Date()).expiration(new Date(System.currentTimeMillis() + jwtProperties.getExpiration()))
+				.signWith(key).compact();
 	}
 }
