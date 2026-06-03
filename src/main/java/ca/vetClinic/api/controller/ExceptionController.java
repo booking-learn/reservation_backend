@@ -29,6 +29,7 @@ public class ExceptionController {
 		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
+    @ExceptionHandler
 	public ResponseEntity<ErrorResponse> handleException(ForbiddenException ex) {
 		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
 		return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);

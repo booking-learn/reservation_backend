@@ -1,4 +1,9 @@
 package ca.vetClinic.api.dto.request;
 
-public record LoginRequest(String email, String password) {
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+public record LoginRequest( @NotBlank(message="The email is required")
+                            @Email(message = "The email format is not valid") String email,
+                         @NotBlank(message = "The password is required")  String password) {
 }
