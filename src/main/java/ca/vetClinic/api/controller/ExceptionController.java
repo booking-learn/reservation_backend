@@ -1,6 +1,7 @@
 package ca.vetClinic.api.controller;
 
 import ca.vetClinic.api.dto.response.ErrorResponse;
+import ca.vetClinic.domain.exception.ConflictException;
 import ca.vetClinic.domain.exception.ForbiddenException;
 import ca.vetClinic.domain.exception.NotFoundException;
 import ca.vetClinic.domain.exception.UnAuthorizedException;
@@ -29,10 +30,15 @@ public class ExceptionController {
 		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
-    @ExceptionHandler
+	@ExceptionHandler
 	public ResponseEntity<ErrorResponse> handleException(ForbiddenException ex) {
 		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
 		return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+	}
+	@ExceptionHandler
+	public ResponseEntity<ErrorResponse> handleException(ConflictException ex) {
+		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
+		return new ResponseEntity<>(error, HttpStatus.CONFLICT);
 	}
 
 }

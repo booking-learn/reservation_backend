@@ -41,4 +41,9 @@ public class AccountRepositoryImpl implements AccountRepository {
 		return jpaRepository.findByEmail(email).map(mapper::toAccount)
 				.orElseThrow(() -> new NotFoundException("email"));
 	}
+
+	@Override
+	public boolean existsByEmail(String email) {
+		return jpaRepository.findByEmail(email).isEmpty();
+	}
 }

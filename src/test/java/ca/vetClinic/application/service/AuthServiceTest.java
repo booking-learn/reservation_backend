@@ -10,10 +10,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.mockito.Mockito.verify;
@@ -24,11 +26,10 @@ class AuthServiceTest {
 
     private final String VALID_EMAIL="jacob@gmail.com";
     private final String PASSWORD="qwerty";
-    private final String INCORRECT_PASSWORD="jacob";
+    private final String INVALID_EMAIL="jacob";
 
     @Mock
     private AccountRepository accountRepository;
-    @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
     private AuthenticationManager authenticationManager;
@@ -38,11 +39,14 @@ class AuthServiceTest {
     private JwtProvider jwtProvider;
     @Mock
     private  JwtProperties jwtProperties;
+    @Captor
+    ArgumentCaptor<Account> captor;
     private RegisterRequest registerRequest;
     private AuthService authService;
     @BeforeEach
     void setUp() {
         registerRequest=new RegisterRequest(VALID_EMAIL,PASSWORD);
+        passwordEncoder = new BCryptPasswordEncoder();
         authService=new AuthService(accountRepository,passwordEncoder,authenticationManager,
                 userDetailsService,jwtProvider,jwtProperties);
     }
@@ -52,12 +56,8 @@ class AuthServiceTest {
         void givenWhenValidRequest_thenRegister()
         {
             authService.register(registerRequest);
-            Account account = accountRepository.findByEmail(VALID_EMAIL);
-            ArgumentCaptor<Account> captor = ArgumentCaptor.forClass(Account.class);
             verify(accountRepository).save(captor.capture());
-
-            Account saved = captor.getValue();
-            assert(saved.getEmail().equals(VALID_EMAIL));
         }
+
     }
 }

@@ -20,9 +20,9 @@ public class EmployeEntity {
 	private UUID id;
 	private String firstName;
 	private String lastName;
-    private String email;
-    private String password;
-    private Role role;
+	private String email;
+	private String password;
+	private Role role;
 	private String phoneNumber;
 	@OneToOne
 	@JoinColumn(name = "account_id")
@@ -31,8 +31,8 @@ public class EmployeEntity {
 	public EmployeEntity() {
 	}
 
-	public EmployeEntity(String firstName, String lastName,String email
-            ,String password,Role role, String phoneNumber) {
+	public EmployeEntity(String firstName, String lastName, String email, String password, Role role,
+			String phoneNumber) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;

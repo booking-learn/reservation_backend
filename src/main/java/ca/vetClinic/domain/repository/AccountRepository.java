@@ -16,4 +16,6 @@ public interface AccountRepository {
 	void save(Account account);
 
 	Account findByEmail(String email);
+
+	boolean existsByEmail(String email);
 }

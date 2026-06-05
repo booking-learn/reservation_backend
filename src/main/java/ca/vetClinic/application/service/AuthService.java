@@ -4,6 +4,7 @@ import ca.vetClinic.api.dto.request.LoginRequest;
 import ca.vetClinic.api.dto.request.RegisterRequest;
 import ca.vetClinic.api.dto.response.AuthResponse;
 import ca.vetClinic.domain.enumerator.Role;
+import ca.vetClinic.domain.exception.ConflictException;
 import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.repository.AccountRepository;
 import ca.vetClinic.infra.security.JwtProperties;
@@ -29,6 +30,9 @@ public class AuthService {
 
 	public AuthResponse register(RegisterRequest request) {
 		Account account = new Account(null, request.email(), passwordEncoder.encode(request.password()), Role.USER);
+		if (accountRepository.existsByEmail(request.email())) {
+			throw new ConflictException("The account with this email already exists!");
+		}
 		accountRepository.save(account);
 
 		UserPrincipal userPrincipal = (UserPrincipal) userDetailsService.loadUserByUsername(request.email());
