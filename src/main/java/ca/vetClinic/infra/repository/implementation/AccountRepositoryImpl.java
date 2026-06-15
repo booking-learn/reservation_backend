@@ -44,6 +44,6 @@ public class AccountRepositoryImpl implements AccountRepository {
 
 	@Override
 	public boolean existsByEmail(String email) {
-		return jpaRepository.findByEmail(email).isEmpty();
+		return jpaRepository.findByEmail(email).isPresent();
 	}
 }
