@@ -19,9 +19,9 @@ public class AccountEntity {
 	private String password;
 	@Enumerated(EnumType.STRING)
 	private Role role;
-	@OneToOne(mappedBy = "employees", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+	@OneToOne(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
 	private EmployeEntity employee;
-	@OneToOne(mappedBy = "users", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+	@OneToOne(mappedBy = "account", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
 	private UserEntity user;
 
 	public AccountEntity() {

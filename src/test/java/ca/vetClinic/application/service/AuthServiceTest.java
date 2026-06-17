@@ -8,13 +8,13 @@ import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.repository.AccountRepository;
 import ca.vetClinic.infra.security.JwtProperties;
 import ca.vetClinic.infra.security.JwtProvider;
+import ca.vetClinic.infra.security.UserPrincipal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.mockito.ArgumentCaptor;
@@ -32,6 +32,7 @@ class AuthServiceTest {
 	private final String VALID_EMAIL = "jacob@gmail.com";
 	private final String PASSWORD = "qwerty";
 	private final String INVALID_EMAIL = "jacob";
+	private final String INVALID_PASSWORD = "azerty";
 
 	@Mock
 	private AccountRepository accountRepository;
@@ -40,6 +41,8 @@ class AuthServiceTest {
 	private AuthenticationManager authenticationManager;
 	@Mock
 	private UserDetailsService userDetailsService;
+	@Mock
+	private UserPrincipal userPrincipal;
 	@Mock
 	private JwtProvider jwtProvider;
 	@Mock
@@ -72,6 +75,16 @@ class AuthServiceTest {
             assertThrows(ConflictException.class,
                     () -> authService.register(new RegisterRequest(VALID_EMAIL, PASSWORD)));
         }
+		@Test
+        void givenWhenValidRequest_thenGenerateToken()
+        {
+            when(userDetailsService.loadUserByUsername(registerRequest.email()))
+                    .thenReturn(userPrincipal);
+            when(jwtProvider.generateToken(userPrincipal))
+                    .thenReturn("fake-jwt-token");
+            AuthResponse response=authService.register(registerRequest);
+            assertNotNull(response.accessToken());
+        }
 	}
 	@Nested
 	class Login {
@@ -81,8 +94,18 @@ class AuthServiceTest {
 		}
 		@Test
 		void givenWhenValidRequest_thenLogin() {
-			AuthResponse response = authService.login(new LoginRequest(VALID_EMAIL, PASSWORD));
+			AuthResponse response = authService.login(loginRequest);
 			assertNotNull(response);
+		}
+		@Test
+		void givenWhenInvalidEmail_thenLoginFail() {
+			AuthResponse response = authService.login(new LoginRequest(INVALID_EMAIL, PASSWORD));
+			assertNull(response.accessToken());
+		}
+		@Test
+		void givenWhenInvalidPassword_thenLoginFail() {
+			AuthResponse response = authService.login(new LoginRequest(VALID_EMAIL, INVALID_PASSWORD));
+			assertNull(response.accessToken());
 		}
 
 	}

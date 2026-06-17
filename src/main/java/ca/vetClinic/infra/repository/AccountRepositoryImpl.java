@@ -1,4 +1,4 @@
-package ca.vetClinic.infra.repository.implementation;
+package ca.vetClinic.infra.repository;
 
 import ca.vetClinic.domain.exception.NotFoundException;
 import ca.vetClinic.domain.model.Account;
@@ -14,8 +14,8 @@ import java.util.UUID;
 @Repository
 @RequiredArgsConstructor
 public class AccountRepositoryImpl implements AccountRepository {
-	AccountJpaRepository jpaRepository;
-	AccountMapper mapper;
+	private final AccountJpaRepository jpaRepository;
+	private final AccountMapper mapper;
 	@Override
 	public List<Account> findAll() {
 		return jpaRepository.findAll().stream().map(mapper::toAccount).toList();

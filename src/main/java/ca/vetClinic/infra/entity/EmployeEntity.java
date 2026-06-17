@@ -1,6 +1,5 @@
 package ca.vetClinic.infra.entity;
 
-import ca.vetClinic.domain.enumerator.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +21,6 @@ public class EmployeEntity {
 	private String lastName;
 	private String email;
 	private String password;
-	private Role role;
 	private String phoneNumber;
 	@OneToOne
 	@JoinColumn(name = "account_id")
@@ -31,8 +29,7 @@ public class EmployeEntity {
 	public EmployeEntity() {
 	}
 
-	public EmployeEntity(String firstName, String lastName, String email, String password, Role role,
-			String phoneNumber) {
+	public EmployeEntity(String firstName, String lastName, String email, String password, String phoneNumber) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;

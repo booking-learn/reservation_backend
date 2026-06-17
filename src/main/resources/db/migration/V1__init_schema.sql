@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS vet_clinic_db;
+
 CREATE TABLE IF NOT EXISTS `accounts`(
     `id` BINARY(16) NOT NULL,
     `email` VARCHAR(255) NOT NULL,

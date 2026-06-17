@@ -16,9 +16,9 @@ public class VeterinarianEntity extends EmployeEntity {
 	public VeterinarianEntity() {
 	}
 
-	public VeterinarianEntity(String firstName, String lastName, String email, String password, Role role,
-			String phoneNumber, String specialty) {
-		super(firstName, lastName, email, password, role, phoneNumber);
+	public VeterinarianEntity(String firstName, String lastName, String email, String password, String phoneNumber,
+			String specialty) {
+		super(firstName, lastName, email, password, phoneNumber);
 		this.specialty = specialty;
 	}
 
