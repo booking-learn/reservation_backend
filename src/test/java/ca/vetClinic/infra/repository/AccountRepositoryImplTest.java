@@ -1,40 +1,44 @@
 package ca.vetClinic.infra.repository;
 
-import ca.vetClinic.domain.repository.AbstractAccountRepositoryTest;
 import ca.vetClinic.domain.repository.AccountRepository;
-import ca.vetClinic.infra.mapper.AccountMapper;
-import ca.vetClinic.infra.repository.jpa.AccountJpaRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestDatabase;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+@SpringBootTest
 @Testcontainers
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class AccountRepositoryImplTest extends AbstractAccountRepositoryTest {
+@Rollback
+@Transactional
+public class AccountRepositoryImplTest extends AbstractAccountRepositoryTest {
 
 	@Container
-	@ServiceConnection
-	static MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8");
+	static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8").withDatabaseName("vet_clinic_db")
+			.withUsername("root").withPassword("password");
+
+	@DynamicPropertySource
+	static void configureProperties(DynamicPropertyRegistry registry) {
+		registry.add("spring.datasource.url", mysql::getJdbcUrl);
+		registry.add("spring.datasource.username", mysql::getUsername);
+		registry.add("spring.datasource.password", mysql::getPassword);
+		registry.add("spring.datasource.driver-class-name", () -> "com.mysql.cj.jdbc.Driver");
+		registry.add("spring.flyway.url", mysql::getJdbcUrl);
+		registry.add("spring.flyway.user", mysql::getUsername);
+		registry.add("spring.flyway.password", mysql::getPassword);
+		registry.add("spring.flyway.enabled", () -> "true");
+		registry.add("spring.jpa.hibernate.ddl-auto", () -> "validate");
+	}
 
 	@Autowired
-	private AccountJpaRepository jpaRepository;
-	@Autowired
-	private AccountMapper mapper;
+	private AccountRepository accountRepository;
 
 	@Override
 	protected AccountRepository createRepository() {
-		return new AccountRepositoryImpl(jpaRepository, mapper);
-	}
-
-	@AfterEach
-	void cleanUp() {
-		jpaRepository.deleteAll();
+		return accountRepository;
 	}
 }

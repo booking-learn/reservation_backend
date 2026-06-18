@@ -2,6 +2,7 @@ package ca.vetClinic.domain.model;
 
 import ca.vetClinic.domain.enumerator.Role;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Account {
@@ -44,8 +45,19 @@ public class Account {
 	public Role getRole() {
 		return role;
 	}
-
-	public void setRole(Role role) {
-		this.role = role;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Account account = (Account) o;
+		return Objects.equals(id, account.id);
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
 }

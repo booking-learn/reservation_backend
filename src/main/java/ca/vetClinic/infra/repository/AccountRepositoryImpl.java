@@ -3,8 +3,11 @@ package ca.vetClinic.infra.repository;
 import ca.vetClinic.domain.exception.NotFoundException;
 import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.repository.AccountRepository;
+import ca.vetClinic.infra.entity.AccountEntity;
 import ca.vetClinic.infra.mapper.AccountMapper;
 import ca.vetClinic.infra.repository.jpa.AccountJpaRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +17,13 @@ import java.util.UUID;
 @Repository
 @RequiredArgsConstructor
 public class AccountRepositoryImpl implements AccountRepository {
+
 	private final AccountJpaRepository jpaRepository;
 	private final AccountMapper mapper;
+
+	@PersistenceContext
+	private EntityManager entityManager;
+
 	@Override
 	public List<Account> findAll() {
 		return jpaRepository.findAll().stream().map(mapper::toAccount).toList();
@@ -33,7 +41,17 @@ public class AccountRepositoryImpl implements AccountRepository {
 
 	@Override
 	public void save(Account account) {
-		jpaRepository.save(mapper.toEntity(account));
+		AccountEntity entity = mapper.toEntity(account);
+		entityManager.persist(entity);
+	}
+
+	@Override
+	public void update(Account account) {
+		AccountEntity entity = mapper.toEntity(account);
+		if (entity.getId() == null) {
+			throw new IllegalArgumentException("Cannot update an entity without an ID. Use save() for new entities.");
+		}
+		entityManager.merge(entity);
 	}
 
 	@Override

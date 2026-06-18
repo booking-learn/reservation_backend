@@ -18,4 +18,6 @@ public interface AccountRepository {
 	Account findByEmail(String email);
 
 	boolean existsByEmail(String email);
+
+	void update(Account account);
 }

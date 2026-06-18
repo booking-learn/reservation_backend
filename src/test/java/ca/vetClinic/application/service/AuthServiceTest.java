@@ -1,7 +1,7 @@
 package ca.vetClinic.application.service;
 
-import ca.vetClinic.api.dto.request.LoginRequest;
 import ca.vetClinic.api.dto.request.RegisterRequest;
+import ca.vetClinic.api.dto.request.LoginRequest;
 import ca.vetClinic.api.dto.response.AuthResponse;
 import ca.vetClinic.domain.exception.ConflictException;
 import ca.vetClinic.domain.model.Account;

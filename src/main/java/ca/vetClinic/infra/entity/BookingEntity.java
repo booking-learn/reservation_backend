@@ -16,15 +16,24 @@ public class BookingEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
+	@Column(name = "id", columnDefinition = "BINARY(16)", updatable = false, nullable = false)
 	private UUID id;
+	@Column(name = "user_id", nullable = false)
 	private UUID userId;
+	@Column(name = "service_id", nullable = false)
 	private UUID serviceId;
+	@Column(name = "pet_id", nullable = false)
 	private UUID petId;
+	@Column(name = "veterinarian_id", nullable = false)
 	private UUID veterinarianId;
+	@Column(name = "time_slot_id", nullable = false)
 	private UUID timeSlotId;
+	@Column(name = "status", nullable = false)
 	private String status;
+	@Column(name = "notes", nullable = false)
 	private String notes;
 	@CreationTimestamp
+	@Column(name = "booking_created_at", nullable = false, updatable = false)
 	private Instant bookingCreatedAt;
 
 	public BookingEntity(UUID userId, UUID serviceId, UUID petId, UUID timeSlotId, String status, String notes) {
