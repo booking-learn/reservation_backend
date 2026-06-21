@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Set up Java 25
-        uses: actions/setup-java@v7
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '25'
@@ -32,7 +32,7 @@ jobs:
     steps:
     - uses: actions/checkout@v7
     - name: Set up Java 25
-      uses: actions/setup-java@v7
+      uses: actions/setup-java@v5
       with:
         java-version: '25'
         distribution: 'temurin'
@@ -50,7 +50,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Set up Java 25
-        uses: actions/setup-java@v7
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '25'
@@ -60,13 +60,13 @@ jobs:
         run: mvn compile -q 
     
   test:
-    name: Compilation
+    name: tests
     runs-on: ubuntu-latest
     steps:
       -  name : checkout
          uses: actions/checkout@v7
       - name: Set up Java 25
-        uses: actions/setup-java@v7
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '25'
