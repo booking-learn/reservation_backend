@@ -11,9 +11,6 @@ RUN ./mvnw clean package -DskipTests
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring
 
-COPY healthcheck.sh /app/healthcheck.sh
-RUN chmod +x /app/healthcheck.sh
-
 COPY  target/*.jar app.jar
 
 EXPOSE 8080
