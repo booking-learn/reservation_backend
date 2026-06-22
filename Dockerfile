@@ -8,7 +8,7 @@ RUN ./mvnw dependency:go-offline
 COPY src ./src
 RUN ./mvnw clean package -DskipTests
 
-RUN addgroup -S spring && adduser -S spring -G spring
+RUN groupadd spring && useradd -r -g spring spring
 USER spring
 
 COPY  target/*.jar app.jar
