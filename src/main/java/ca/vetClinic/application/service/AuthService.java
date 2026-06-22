@@ -29,7 +29,7 @@ public class AuthService {
 	private final JwtProvider jwtProvider;
 	private final JwtProperties jwtProperties;
 
-    @Transactional
+	@Transactional
 	public AuthResponse register(RegisterRequest request) {
 		Account account = new Account(null, request.email(), passwordEncoder.encode(request.password()), Role.USER);
 		if (accountRepository.existsByEmail(request.email())) {
