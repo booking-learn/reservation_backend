@@ -5,6 +5,7 @@ import ca.vetClinic.domain.exception.ConflictException;
 import ca.vetClinic.domain.exception.ForbiddenException;
 import ca.vetClinic.domain.exception.NotFoundException;
 import ca.vetClinic.domain.exception.UnAuthorizedException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,8 +13,14 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
+@Slf4j
 public class ExceptionController {
 
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<String> handleAll(Exception e) {
+		log.error("Unhandled exception: {}", e.getMessage(), e);
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal error");
+	}
 	@ExceptionHandler
 	public ResponseEntity<ErrorResponse> handleException(NotFoundException ex) {
 		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
