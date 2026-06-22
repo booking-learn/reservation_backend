@@ -12,24 +12,14 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
-    @Bean
-    public OpenAPI vetClinicOpenAPI() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("Vet Clinic API")
-                        .description("Vet Clinic API")
-                        .version("v1.0.0")
-                        .license(new License()
-                                .name("Apache 2.0")
-                                .url("http://springdoc.org")))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-                .components(new Components()
-                        .addSecuritySchemes("bearerAuth",
-                                new SecurityScheme()
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT")
-                                        .in(SecurityScheme.In.HEADER)
-                                        .name("Authorization")));
-    }
+	@Bean
+	public OpenAPI vetClinicOpenAPI() {
+		return new OpenAPI()
+				.info(new Info().title("Vet Clinic API").description("Vet Clinic API").version("v1.0.0")
+						.license(new License().name("Apache 2.0").url("http://springdoc.org")))
+				.addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+				.components(new Components().addSecuritySchemes("bearerAuth",
+						new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")
+								.in(SecurityScheme.In.HEADER).name("Authorization")));
+	}
 }
