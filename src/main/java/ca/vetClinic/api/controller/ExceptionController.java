@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 public class ExceptionController {
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<String> handleAll(Exception e) {
+	@ExceptionHandler
+	public ResponseEntity<String> handleException(Exception e) {
 		log.error("Unhandled exception: {}", e.getMessage(), e);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal error");
 	}
