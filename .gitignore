@@ -16,6 +16,8 @@ dependency-reduced-pom.xml
 *.log
 logs/
 
+### spring boot ####
+application-dev.yml
 
 ### STS ###
 .apt_generated
@@ -54,4 +56,3 @@ build/
 ### OS ###
 .DS_Store
 Thumbs.db
-Desktop.inis
