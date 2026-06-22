@@ -17,11 +17,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionController {
 
 	@ExceptionHandler
-	public ResponseEntity<String> handleException(Exception e) {
-		log.error("Unhandled exception: {}", e.getMessage(), e);
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal error");
-	}
-	@ExceptionHandler
 	public ResponseEntity<ErrorResponse> handleException(NotFoundException ex) {
 		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
@@ -46,6 +41,12 @@ public class ExceptionController {
 	public ResponseEntity<ErrorResponse> handleException(ConflictException ex) {
 		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
 		return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+	}
+	@ExceptionHandler
+	public ResponseEntity<ErrorResponse> handleException(Exception ex) {
+		log.error("Unhandled exception", ex);
+		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
+		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }

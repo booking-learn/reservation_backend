@@ -1,5 +1,3 @@
-app:
-  server-url: https://vetclinic.onrender.com
 spring:
   datasource:
     url: jdbc:mysql://${TIDB_HOST}:4000/${TIDB_DB}?sslMode=VERIFY_IDENTITY&enabledTLSProtocols=TLSv1.2,TLSv1.3
@@ -8,8 +6,18 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 springdoc:
   swagger-ui:
-    server-url: https://vetclinic.onrender.com
+    server-url: https://vet-clinic-backend-eji8.onrender.com
   show-actuator: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+
 logging:
   level:
     root: WARN
