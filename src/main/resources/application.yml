@@ -1,0 +1,32 @@
+spring:
+  profiles:
+    active: dev
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    operations-sorter: method
+    tags-sorter: alpha
+  show-actuator: false
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
