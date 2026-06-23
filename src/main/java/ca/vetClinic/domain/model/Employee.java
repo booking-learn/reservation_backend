@@ -2,15 +2,14 @@ package ca.vetClinic.domain.model;
 
 import java.util.UUID;
 
-public class Employe {
+public class Employee {
 	private UUID id;
 	private UUID accountId;
 	private String firstName;
 	private String lastName;
-
 	private String phoneNumber;
 
-	public Employe(UUID id, UUID accountId, String firstName, String lastName, String phoneNumber) {
+	public Employee(UUID id, UUID accountId, String firstName, String lastName, String phoneNumber) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -57,7 +56,4 @@ public class Employe {
 		return accountId;
 	}
 
-	public void setAccountId(UUID accountId) {
-		this.accountId = accountId;
-	}
 }

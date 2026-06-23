@@ -1,11 +1,11 @@
-package ca.vetClinic.domain.repository;
+package ca.vetClinic.domain.service;
 
 import ca.vetClinic.domain.model.Employee;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface EmployeRepository {
+public interface EmployeeService {
 	List<Employee> findAll();
 
 	Employee findById(UUID id);

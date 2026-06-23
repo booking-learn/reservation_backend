@@ -13,4 +13,6 @@ public interface UserService {
 	void save(User user);
 
 	void deleteById(UUID id);
+
+	User findByAccountId(UUID id);
 }

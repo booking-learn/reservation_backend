@@ -1,6 +1,7 @@
 package ca.vetClinic.domain.model;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
 public class User {
@@ -57,15 +58,18 @@ public class User {
 		return userCreatedAt;
 	}
 
-	public void setUserCreatedAt(Instant userCreatedAt) {
-		this.userCreatedAt = userCreatedAt;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		User user = (User) obj;
+		return user.getId().equals(((User) obj).getId());
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 
-	public UUID getAccountId() {
-		return accountId;
-	}
-
-	public void setAccountId(UUID accountId) {
-		this.accountId = accountId;
-	}
 }

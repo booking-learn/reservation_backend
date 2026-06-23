@@ -33,6 +33,9 @@ class AuthServiceTest {
 	private final String PASSWORD = "qwerty";
 	private final String INVALID_EMAIL = "jacob";
 	private final String INVALID_PASSWORD = "azerty";
+	private final String FIRST_NAME = "jacob";
+	private final String LAST_NAME = "houle";
+	private final String PHONE_NUMBER = "1234567890";
 
 	@Mock
 	private AccountRepository accountRepository;
@@ -54,7 +57,7 @@ class AuthServiceTest {
 	private AuthService authService;
 	@BeforeEach
 	void setUp() {
-		registerRequest = new RegisterRequest(VALID_EMAIL, PASSWORD);
+		registerRequest = new RegisterRequest(VALID_EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER);
 		loginRequest = new LoginRequest(VALID_EMAIL, PASSWORD);
 		passwordEncoder = new BCryptPasswordEncoder();
 		authService = new AuthService(accountRepository, passwordEncoder, authenticationManager, userDetailsService,
@@ -73,7 +76,7 @@ class AuthServiceTest {
         {
             when(accountRepository.existsByEmail(VALID_EMAIL)).thenReturn(true);
             assertThrows(ConflictException.class,
-                    () -> authService.register(new RegisterRequest(VALID_EMAIL, PASSWORD)));
+                    () -> authService.register(new RegisterRequest(VALID_EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER)));
         }
 		@Test
         void givenWhenValidRequest_thenGenerateToken()

@@ -1,12 +1,11 @@
-package ca.vetClinic.domain.repository;
+package ca.vetClinic.domain.service;
 
 import ca.vetClinic.domain.model.Account;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface AccountRepository {
-
+public interface AccountService {
 	List<Account> findAll();
 
 	Account findById(UUID id);
@@ -18,5 +17,4 @@ public interface AccountRepository {
 	Account findByEmail(String email);
 
 	boolean existsByEmail(String email);
-
 }

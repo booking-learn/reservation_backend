@@ -5,9 +5,13 @@ import ca.vetClinic.domain.exception.ConflictException;
 import ca.vetClinic.domain.exception.ForbiddenException;
 import ca.vetClinic.domain.exception.NotFoundException;
 import ca.vetClinic.domain.exception.UnAuthorizedException;
+import com.fasterxml.jackson.core.JsonParseException;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -41,6 +45,31 @@ public class ExceptionController {
 	public ResponseEntity<ErrorResponse> handleException(ConflictException ex) {
 		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
 		return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+	}
+	@ExceptionHandler
+	public ResponseEntity<ErrorResponse> handleException(IllegalArgumentException ex) {
+		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
+		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+	}
+	@ExceptionHandler
+	public ResponseEntity<ErrorResponse> handleException(ConstraintViolationException ex) {
+		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
+		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+	}
+	@ExceptionHandler
+	public ResponseEntity<ErrorResponse> handleException(HttpMediaTypeNotSupportedException ex) {
+		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
+		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+	}
+	@ExceptionHandler
+	public ResponseEntity<ErrorResponse> handleException(JsonParseException ex) {
+		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
+		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+	}
+	@ExceptionHandler
+	public ResponseEntity<ErrorResponse> handleException(HttpMessageNotReadableException ex) {
+		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
+		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 	@ExceptionHandler
 	public ResponseEntity<ErrorResponse> handleException(Exception ex) {

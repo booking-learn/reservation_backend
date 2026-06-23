@@ -14,7 +14,6 @@ public class UserServiceImpl implements UserService {
 
 	private UserRepository userRepository;
 
-	@Autowired
 	public UserServiceImpl(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
@@ -36,5 +35,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteById(UUID id) {
 		userRepository.delete(id);
+	}
+
+	@Override
+	public User findByAccountId(UUID id) {
+		return userRepository.findByAccountId(id);
 	}
 }

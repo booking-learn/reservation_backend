@@ -42,16 +42,8 @@ public class AccountRepositoryImpl implements AccountRepository {
 	@Override
 	public void save(Account account) {
 		AccountEntity entity = mapper.toEntity(account);
-		entityManager.persist(entity);
-	}
-
-	@Override
-	public void update(Account account) {
-		AccountEntity entity = mapper.toEntity(account);
-		if (entity.getId() == null) {
-			throw new IllegalArgumentException("Cannot update an entity without an ID. Use save() for new entities.");
-		}
-		entityManager.merge(entity);
+		// entityManager.persist(entity);
+		jpaRepository.save(entity);
 	}
 
 	@Override
