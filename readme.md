@@ -5,7 +5,7 @@ REST API for veterinary clinic management — JWT-secured, built with hexagonal 
 
 📄 **[Explore the API on Swagger UI](https://vet-clinic-backend-eji8.onrender.com/swagger-ui/index.html)**
 
-> ⚠️ Hosted on a free Render instance — first request may take 2 minutes if the service is idle.
+> ⚠️ Hosted on a free Render instance — first request may take 3 minutes if the service is idle.
 
 ---
 
