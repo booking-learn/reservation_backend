@@ -11,7 +11,8 @@ REST API for veterinary clinic management — JWT-secured, built with hexagonal 
 
 ## Stack
 
-`Java 25` · `Spring Boot 4.0.2` · `Spring Security + JWT` · `JPA / Hibernate 7` · `TiDB Cloud (MySQL)` · `Flyway` · `Docker` · `GitHub Actions` · `Testcontainers`
+`Java 25` · `Spring Boot 4.0.2` · `Spring Security + JWT` · `JPA / Hibernate 7` · `TiDB Cloud (MySQL)` · `Flyway` · `Docker` · `GitHub Actions` 
+· `Testcontainers` · `JUnit 5` · `RestAssured`
 
 ## Architecture
 
@@ -26,4 +27,4 @@ infrastructure/  → JPA, security, external adapters
 
 ## Testing
 
-Unit tests with **JUnit 5 + Mockito** and integration tests with **Testcontainers** (real MySQL container, no mocks).
+Unit tests with **JUnit 5 + Mockito**, integration tests with **Testcontainers** (real MySQL container, no mocks) and E2E tests with **RestAssured**

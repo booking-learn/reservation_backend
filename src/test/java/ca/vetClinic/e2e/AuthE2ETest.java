@@ -3,7 +3,6 @@ package ca.vetClinic.e2e;
 import ca.vetClinic.api.dto.request.LoginRequest;
 import ca.vetClinic.api.dto.request.RegisterRequest;
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

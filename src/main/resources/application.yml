@@ -11,6 +11,7 @@ spring:
     properties:
       hibernate:
         physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    open-in-view: false
 
 jwt:
   secret: ${JWT_SECRET}
