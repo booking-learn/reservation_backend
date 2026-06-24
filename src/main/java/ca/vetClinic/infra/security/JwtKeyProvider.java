@@ -14,7 +14,7 @@ public class JwtKeyProvider {
 	private final JwtProperties jwtProperties;
 
 	public SecretKey generate() {
-		return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.getSecret()));
+		return Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(jwtProperties.getSecret()));
 	}
 
 }
