@@ -1,5 +1,6 @@
-package ca.vetClinic.infra.repository;
+package ca.vetClinic.integration.repository;
 
+import ca.vetClinic.base.AbstractContainerBase;
 import ca.vetClinic.domain.enumerator.Role;
 import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.repository.AccountRepository;
@@ -9,13 +10,12 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @Rollback
-public abstract class AbstractAccountRepositoryTest {
+public abstract class AbstractAccountRepositoryTest extends AbstractContainerBase {
 
 	private final String EMAIL = "jacob@gmail.com";
 	private final String OTHER_EMAIL = "other@email.com";
