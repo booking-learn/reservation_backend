@@ -58,6 +58,10 @@ public class User {
 		return userCreatedAt;
 	}
 
+	public UUID getAccountId() {
+		return accountId;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

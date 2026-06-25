@@ -19,6 +19,11 @@ public class AuthE2ETest extends BaseE2ETest {
 	private JdbcTemplate jdbcTemplate;
 	@Nested
 	class register {
+		@BeforeEach
+		void cleanUp() {
+			jdbcTemplate.execute("DELETE FROM users");
+			jdbcTemplate.execute("DELETE FROM accounts");
+		}
 		@Test
 		void givenWhenValidRequest_thenSuccess() {
 			given().contentType(ContentType.JSON).body("""

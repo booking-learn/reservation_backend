@@ -7,6 +7,7 @@ import ca.vetClinic.application.service.AuthService;
 import ca.vetClinic.domain.exception.ConflictException;
 import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.repository.AccountRepository;
+import ca.vetClinic.domain.service.UserService;
 import ca.vetClinic.infra.security.JwtProperties;
 import ca.vetClinic.infra.security.JwtProvider;
 import ca.vetClinic.infra.security.UserPrincipal;
@@ -51,6 +52,8 @@ class AuthServiceTest {
 	private JwtProvider jwtProvider;
 	@Mock
 	private JwtProperties jwtProperties;
+	@Mock
+	private UserService userService;
 	@Captor
 	ArgumentCaptor<Account> captor;
 	private RegisterRequest registerRequest;
@@ -62,7 +65,7 @@ class AuthServiceTest {
 		loginRequest = new LoginRequest(VALID_EMAIL, PASSWORD);
 		passwordEncoder = new BCryptPasswordEncoder();
 		authService = new AuthService(accountRepository, passwordEncoder, authenticationManager, userDetailsService,
-				jwtProvider, jwtProperties);
+				jwtProvider, jwtProperties, userService);
 	}
 	@Nested
 	class Register {

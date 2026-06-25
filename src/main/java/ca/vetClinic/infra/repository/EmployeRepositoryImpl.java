@@ -3,6 +3,7 @@ package ca.vetClinic.infra.repository;
 import ca.vetClinic.domain.exception.NotFoundException;
 import ca.vetClinic.domain.model.Employee;
 import ca.vetClinic.domain.repository.EmployeRepository;
+import ca.vetClinic.infra.entity.EmployeEntity;
 import ca.vetClinic.infra.mapper.EmployeMapper;
 import ca.vetClinic.infra.repository.jpa.EmployeJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +15,8 @@ import java.util.UUID;
 @Repository
 @RequiredArgsConstructor
 public class EmployeRepositoryImpl implements EmployeRepository {
-	EmployeJpaRepository jpaRepository;
-	EmployeMapper mapper;
+	private final EmployeJpaRepository jpaRepository;
+	private final EmployeMapper mapper;
 
 	@Override
 	public List<Employee> findAll() {
@@ -29,7 +30,9 @@ public class EmployeRepositoryImpl implements EmployeRepository {
 
 	@Override
 	public void save(Employee employee) {
-		jpaRepository.save(mapper.toEntity(employee));
+		EmployeEntity entity = mapper.toEntity(employee);
+		jpaRepository.save(entity);
+		employee.setId(entity.getId());
 	}
 
 	@Override

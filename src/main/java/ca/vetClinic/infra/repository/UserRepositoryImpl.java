@@ -3,6 +3,8 @@ package ca.vetClinic.infra.repository;
 import ca.vetClinic.domain.exception.NotFoundException;
 import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.repository.UserRepository;
+import ca.vetClinic.infra.entity.AccountEntity;
+import ca.vetClinic.infra.entity.UserEntity;
 import ca.vetClinic.infra.mapper.UserMapper;
 import ca.vetClinic.infra.repository.jpa.AccountJpaRepository;
 import ca.vetClinic.infra.repository.jpa.UserJpaRepository;
@@ -16,9 +18,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
-	private UserJpaRepository jpaRepository;
-	private UserMapper mapper;
-	private AccountJpaRepository JpaRepository;
+	private final UserJpaRepository jpaRepository;
+	private final UserMapper mapper;
+	private final AccountJpaRepository accountJpaRepository;
 
 	@Override
 	public List<User> findAll() {
@@ -32,7 +34,13 @@ public class UserRepositoryImpl implements UserRepository {
 
 	@Override
 	public void save(User user) {
-		jpaRepository.save(mapper.toEntity(user));
+		AccountEntity accountEntity = accountJpaRepository.findById(user.getAccountId())
+				.orElseThrow(() -> new NotFoundException("accountId"));
+
+		UserEntity entity = mapper.toEntity(user);
+		entity.setAccount(accountEntity);
+		jpaRepository.save(entity);
+		user.setId(entity.getId());
 	}
 
 	@Override
