@@ -26,8 +26,8 @@ public class ProfileController {
 	private final EmployeeService employeeService;
 	private final UserMapper userMapper;
 	private final EmployeeMapper employeeMapper;
-	@GetMapping("/me")
-	public ResponseEntity<?> getMe(@AuthenticationPrincipal UserDetails userDetails) {
+	@GetMapping
+	public ResponseEntity<?> getProfile(@AuthenticationPrincipal UserDetails userDetails) {
 		Account account = accountService.findByEmail(userDetails.getUsername());
 
 		if (account.getRole() == Role.USER) {

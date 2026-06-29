@@ -1,9 +1,9 @@
 package ca.vetClinic.application.service;
 
+import ca.vetClinic.application.command.UpdateUserCommand;
 import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.repository.UserRepository;
 import ca.vetClinic.domain.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,4 +41,14 @@ public class UserServiceImpl implements UserService {
 	public User findByAccountId(UUID id) {
 		return userRepository.findByAccountId(id);
 	}
+
+	@Override
+	public void updateUser(UUID accountId, UpdateUserCommand cmd) {
+		User user = userRepository.findByAccountId(accountId);
+		user.setFirstName(cmd.firstName());
+		user.setLastName(cmd.lastName());
+		user.setPhoneNumber(String.valueOf(cmd.phoneNumber()));
+		userRepository.save(user);
+	}
+
 }
