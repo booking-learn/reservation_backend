@@ -1,5 +1,7 @@
 package ca.vetClinic.domain.service;
 
+import ca.vetClinic.application.command.UpdateEmailCmd;
+import ca.vetClinic.application.command.UpdatePasswordCmd;
 import ca.vetClinic.domain.model.Account;
 
 import java.util.List;
@@ -17,4 +19,8 @@ public interface AccountService {
 	Account findByEmail(String email);
 
 	boolean existsByEmail(String email);
+
+	void updateEmail(UUID id, UpdateEmailCmd cmd);
+
+	void updatePassword(UUID id, UpdatePasswordCmd cmd);
 }

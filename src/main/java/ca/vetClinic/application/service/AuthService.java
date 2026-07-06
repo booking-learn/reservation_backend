@@ -8,6 +8,7 @@ import ca.vetClinic.domain.exception.ConflictException;
 import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.repository.AccountRepository;
+import ca.vetClinic.domain.service.AccountService;
 import ca.vetClinic.domain.service.UserService;
 import ca.vetClinic.infra.security.JwtProperties;
 import ca.vetClinic.infra.security.JwtProvider;
@@ -24,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthService {
 
-	private final AccountRepository accountRepository;
+	private final AccountService accountService;
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
 	private final UserDetailsService userDetailsService;
@@ -34,11 +35,11 @@ public class AuthService {
 
 	@Transactional
 	public AuthResponse register(RegisterRequest request) {
-		if (accountRepository.existsByEmail(request.email())) {
+		if (accountService.existsByEmail(request.email())) {
 			throw new ConflictException("The account with this email already exists!");
 		}
 		Account account = new Account(null, request.email(), passwordEncoder.encode(request.password()), Role.USER);
-		accountRepository.save(account);
+		accountService.save(account);
 		User user = new User(null, account.getId(), request.firstName(), request.lastName(), request.phoneNumber(),
 				null);
 		userService.save(user);

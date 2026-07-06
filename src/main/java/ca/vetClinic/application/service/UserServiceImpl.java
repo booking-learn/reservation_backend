@@ -1,6 +1,7 @@
 package ca.vetClinic.application.service;
 
-import ca.vetClinic.application.command.UpdateUserCommand;
+import ca.vetClinic.application.command.UpdateUserCmd;
+import ca.vetClinic.application.command.UpdateEmailCmd;
 import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.repository.UserRepository;
 import ca.vetClinic.domain.service.UserService;
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updateUser(UUID accountId, UpdateUserCommand cmd) {
+	public void updateUser(UUID accountId, UpdateUserCmd cmd) {
 		User user = userRepository.findByAccountId(accountId);
 		user.setFirstName(cmd.firstName());
 		user.setLastName(cmd.lastName());

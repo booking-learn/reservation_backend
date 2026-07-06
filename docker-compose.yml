@@ -25,14 +25,6 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/vetclinic
       - SPRING_DATASOURCE_USERNAME=vetclinic_app
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
-    healthcheck:
-      test: ["CMD", "/app/healthcheck.sh"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    depends_on:
-      db:
-        condition: service_healthy
 
 volumes:
   mysql-data:

@@ -7,6 +7,7 @@ import ca.vetClinic.application.service.AuthService;
 import ca.vetClinic.domain.exception.ConflictException;
 import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.repository.AccountRepository;
+import ca.vetClinic.domain.service.AccountService;
 import ca.vetClinic.domain.service.UserService;
 import ca.vetClinic.infra.security.JwtProperties;
 import ca.vetClinic.infra.security.JwtProvider;
@@ -40,7 +41,7 @@ class AuthServiceTest {
 	private final String PHONE_NUMBER = "1234567890";
 
 	@Mock
-	private AccountRepository accountRepository;
+	private AccountService accountService;
 	private PasswordEncoder passwordEncoder;
 	@Mock
 	private AuthenticationManager authenticationManager;
@@ -64,7 +65,7 @@ class AuthServiceTest {
 		registerRequest = new RegisterRequest(VALID_EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER);
 		loginRequest = new LoginRequest(VALID_EMAIL, PASSWORD);
 		passwordEncoder = new BCryptPasswordEncoder();
-		authService = new AuthService(accountRepository, passwordEncoder, authenticationManager, userDetailsService,
+		authService = new AuthService(accountService, passwordEncoder, authenticationManager, userDetailsService,
 				jwtProvider, jwtProperties, userService);
 	}
 	@Nested
@@ -73,12 +74,12 @@ class AuthServiceTest {
 		@Test
 		void givenWhenValidRequest_thenRegister() {
 			authService.register(registerRequest);
-			verify(accountRepository).save(captor.capture());
+			verify(accountService).save(captor.capture());
 		}
 		@Test
         void givenWhenEmailExists_thenThrowConflictException()
         {
-            when(accountRepository.existsByEmail(VALID_EMAIL)).thenReturn(true);
+            when(accountService.existsByEmail(VALID_EMAIL)).thenReturn(true);
             assertThrows(ConflictException.class,
                     () -> authService.register(new RegisterRequest(VALID_EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER)));
         }
