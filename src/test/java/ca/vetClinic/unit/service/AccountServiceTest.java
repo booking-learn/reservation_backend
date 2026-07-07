@@ -65,7 +65,6 @@ class AccountServiceTest {
 	}
 	@Test
 	void givenWhenInvalidOldEmail_thenThrowException() {
-		doReturn(uuid).when(account).getId();
 		doReturn(OLD_EMAIL).when(account).getEmail();
 		when(accountRepository.findById(uuid)).thenReturn(account);
 		assertThrows(BadCredentialsException.class, () -> accountService.updateEmail(uuid, invalidUpdateEmailCmd));
@@ -81,7 +80,6 @@ class AccountServiceTest {
 	}
 	@Test
 	void givenWhenInvalidOldPassword_thenThrowException() {
-		doReturn(uuid).when(account).getId();
 		doReturn(OLD_PASSWORD).when(account).getPassword();
 		when(accountRepository.findById(uuid)).thenReturn(account);
 		assertThrows(BadCredentialsException.class,

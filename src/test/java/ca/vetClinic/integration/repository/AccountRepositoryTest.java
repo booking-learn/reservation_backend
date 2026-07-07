@@ -4,8 +4,9 @@ import ca.vetClinic.base.AbstractContainerBase;
 import ca.vetClinic.domain.enumerator.Role;
 import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.repository.AccountRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,24 +15,19 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 @Transactional
 @Rollback
 @Sql(scripts = "/sql/CleanUp.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-public abstract class AbstractAccountRepositoryTest extends AbstractContainerBase {
+public class AccountRepositoryTest extends AbstractContainerBase {
 
 	private final String EMAIL = "jacob@gmail.com";
 	private final String OTHER_EMAIL = "other@email.com";
 	private final String PASSWORD = "qwerty";
 	private final int EXPECTED_TWO = 2;
 
-	protected AccountRepository repository;
-
-	@BeforeEach
-	void setUp() {
-		repository = createRepository();
-	}
-
-	protected abstract AccountRepository createRepository();
+	@Autowired
+	private AccountRepository repository;
 
 	private Account createAccount(String email) {
 		return new Account(null, email, PASSWORD, Role.USER);
