@@ -7,6 +7,7 @@ import ca.vetClinic.domain.repository.AccountRepository;
 import ca.vetClinic.domain.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
-	private AccountRepository accountRepository;
+	private final AccountRepository accountRepository;
+	private final PasswordEncoder passwordEncoder;
 	@Override
 	public List<Account> findAll() {
 		return accountRepository.findAll();
@@ -61,10 +63,10 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public void updatePassword(UUID id, UpdatePasswordCmd cmd) {
 		Account account = accountRepository.findById(id);
-		if (!Objects.equals(account.getPassword(), cmd.oldPassword())) {
+		if (!passwordEncoder.matches(cmd.oldPassword(), account.getPassword())) {
 			throw new BadCredentialsException("Invalid password!");
 		}
-		account.setPassword(cmd.newPassword());
+		account.setPassword(passwordEncoder.encode(cmd.newPassword()));
 		accountRepository.save(account);
 	}
 }
