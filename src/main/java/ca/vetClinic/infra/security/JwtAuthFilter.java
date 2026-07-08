@@ -31,7 +31,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 		String path = request.getRequestURI();
 
-		if (path.startsWith("/auth/")) {
+		if (isPublicPath(path)) {
 			filterChain.doFilter(request, response);
 			return;
 		}
@@ -58,5 +58,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		}
 
 		filterChain.doFilter(request, response);
+	}
+
+	private boolean isPublicPath(String path) {
+		return path.startsWith("/auth/") || path.equals("/status") || path.startsWith("/actuator/health")
+				|| path.startsWith("/swagger-ui/") || path.startsWith("/v3/api-docs")
+				|| path.startsWith("/swagger-resources/") || path.startsWith("/webjars/");
 	}
 }
