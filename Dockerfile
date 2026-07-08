@@ -14,5 +14,4 @@ RUN groupadd spring && useradd -r -g spring spring && \
 
 USER spring
 
-EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

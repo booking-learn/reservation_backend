@@ -4,8 +4,6 @@ spring:
     username: ${TIDB_USERNAME}
     password: ${TIDB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
-server:
-  port: ${PORT:8080}
 springdoc:
   swagger-ui:
     server-url: https://vet-clinic-backend-eji8.onrender.com
