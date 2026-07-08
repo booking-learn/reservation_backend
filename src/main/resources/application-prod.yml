@@ -20,4 +20,7 @@ management:
 
 logging:
   level:
-    root: WARN
+    root: INFO
+    org.hibernate: DEBUG
+    org.flywaydb: DEBUG
+    com.zaxxer.hikari: DEBUG
