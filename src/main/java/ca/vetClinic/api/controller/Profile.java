@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/profile")
 @RequiredArgsConstructor
-public class ProfileController {
+public class Profile {
 	private final AccountService accountService;
 	private final UserService userService;
 	private final EmployeeService employeeService;
