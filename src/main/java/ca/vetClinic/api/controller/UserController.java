@@ -33,7 +33,7 @@ public class UserController {
 	}
 	@PatchMapping("/email")
 	public ResponseEntity<Void> updateEmail(@AuthenticationPrincipal UserDetails user,
-			@Valid UpdateEmailRequest request) {
+			@RequestBody @Valid UpdateEmailRequest request) {
 		Account account = accountService.findByEmail(user.getUsername());
 		UpdateEmailCmd cmd = new UpdateEmailCmd(request.oldEmail(), request.newEmail());
 		accountService.updateEmail(account.getId(), cmd);
@@ -41,7 +41,7 @@ public class UserController {
 	}
 	@PatchMapping("/password")
 	public ResponseEntity<Void> updatePassword(@AuthenticationPrincipal UserDetails user,
-			@Valid UpdatePasswordRequest request) {
+			@RequestBody @Valid UpdatePasswordRequest request) {
 		Account account = accountService.findByEmail(user.getUsername());
 		UpdatePasswordCmd cmd = new UpdatePasswordCmd(request.oldPassword(), request.newPassword());
 		accountService.updatePassword(account.getId(), cmd);

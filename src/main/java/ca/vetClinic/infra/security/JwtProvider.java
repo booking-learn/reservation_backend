@@ -1,8 +1,6 @@
 package ca.vetClinic.infra.security;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +16,10 @@ public class JwtProvider {
 
 	public String generateToken(UserPrincipal userPrincipal) {
 		SecretKey key = jwtKeyProvider.generate();
+		long now = System.currentTimeMillis();
+		long expiryMillis = now + jwtProperties.getExpiration();
+
 		return Jwts.builder().subject(userPrincipal.getEmail()).claim("role", userPrincipal.getRole().name())
-				.issuedAt(new Date()).expiration(new Date(System.currentTimeMillis() + jwtProperties.getExpiration()))
-				.signWith(key).compact();
+				.issuedAt(new Date(now)).expiration(new Date(expiryMillis)).signWith(key).compact();
 	}
 }

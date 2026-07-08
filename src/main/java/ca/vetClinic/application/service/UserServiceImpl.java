@@ -1,22 +1,25 @@
 package ca.vetClinic.application.service;
 
 import ca.vetClinic.application.command.UpdateUserCmd;
-import ca.vetClinic.application.command.UpdateEmailCmd;
 import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.repository.UserRepository;
 import ca.vetClinic.domain.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	public UserServiceImpl(UserRepository userRepository) {
-		this.userRepository = userRepository;
+	private void validateUUID(UUID uuid) {
+		if (uuid == null) {
+			throw new IllegalArgumentException("UUID is null");
+		}
 	}
 	@Override
 	public List<User> findAll() {
@@ -25,26 +28,33 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findById(UUID id) {
+		validateUUID(id);
 		return userRepository.findById(id);
 	}
 
 	@Override
 	public void save(User user) {
+		if (user.getAccountId() == null) {
+			throw new IllegalArgumentException("User must have an account id");
+		}
 		userRepository.save(user);
 	}
 
 	@Override
 	public void deleteById(UUID id) {
+		validateUUID(id);
 		userRepository.delete(id);
 	}
 
 	@Override
 	public User findByAccountId(UUID id) {
+		validateUUID(id);
 		return userRepository.findByAccountId(id);
 	}
 
 	@Override
 	public void updateUser(UUID accountId, UpdateUserCmd cmd) {
+		validateUUID(accountId);
 		User user = userRepository.findByAccountId(accountId);
 		user.setFirstName(cmd.firstName());
 		user.setLastName(cmd.lastName());

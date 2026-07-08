@@ -29,14 +29,23 @@ public class UserRepositoryImpl implements UserRepository {
 
 	@Override
 	public User findById(UUID id) {
-		return jpaRepository.findById(id).map(mapper::toDomain).orElseThrow(() -> new NotFoundException("id"));
+		return jpaRepository.findById(id).map(mapper::toDomain)
+				.orElseThrow(() -> new NotFoundException("User not found"));
 	}
 
 	@Override
 	public void save(User user) {
+		if (user.getId() != null) {
+			UserEntity existing = jpaRepository.findById(user.getId())
+					.orElseThrow(() -> new NotFoundException("User not found with id: " + user.getId()));
+			existing.setFirstName(user.getFirstName());
+			existing.setLastName(user.getLastName());
+			existing.setPhoneNumber(user.getPhoneNumber());
+			jpaRepository.save(existing);
+			return;
+		}
 		AccountEntity accountEntity = accountJpaRepository.findById(user.getAccountId())
-				.orElseThrow(() -> new NotFoundException("accountId"));
-
+				.orElseThrow(() -> new NotFoundException("Account not found with id: " + user.getAccountId()));
 		UserEntity entity = mapper.toEntity(user);
 		entity.setAccount(accountEntity);
 		jpaRepository.save(entity);
@@ -51,6 +60,6 @@ public class UserRepositoryImpl implements UserRepository {
 	@Override
 	public User findByAccountId(UUID id) {
 		return jpaRepository.findByAccountId(id).map(mapper::toDomain)
-				.orElseThrow(() -> new NotFoundException("accountId"));
+				.orElseThrow(() -> new NotFoundException("Account not found"));
 	}
 }

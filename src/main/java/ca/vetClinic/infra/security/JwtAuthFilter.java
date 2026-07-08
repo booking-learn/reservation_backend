@@ -29,33 +29,30 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
-		log.debug("Processing JWT filter for: {}", request.getServletPath());
+		String path = request.getRequestURI();
+
+		if (path.startsWith("/auth/")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
 
 		String authHeader = request.getHeader("Authorization");
-
 		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-			log.debug("No Bearer token found, continuing filter chain");
-			filterChain.doFilter(request, response);
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid token");
 			return;
 		}
 
 		String token = authHeader.substring(7);
-
 		if (!jwtValidator.isValid(token)) {
-			log.warn("Invalid JWT token");
-			filterChain.doFilter(request, response);
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
 			return;
 		}
 
 		String username = jwtExtractor.extractUsername(token);
-
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-			log.debug("Authenticated user: {}", username);
-
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
 					null, userDetails.getAuthorities());
-
 			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
