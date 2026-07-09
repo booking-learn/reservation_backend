@@ -9,7 +9,7 @@ import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.service.AccountService;
 import ca.vetClinic.domain.service.UserService;
 import ca.vetClinic.infra.security.JwtProperties;
-import ca.vetClinic.infra.security.JwtProvider;
+import ca.vetClinic.infra.security.JwtService;
 import ca.vetClinic.infra.security.UserPrincipal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -49,7 +49,7 @@ class AuthServiceTest {
 	@Mock
 	private UserPrincipal userPrincipal;
 	@Mock
-	private JwtProvider jwtProvider;
+	private JwtService jwtService;
 	@Mock
 	private JwtProperties jwtProperties;
 	@Mock
@@ -65,7 +65,7 @@ class AuthServiceTest {
 		loginRequest = new LoginRequest(VALID_EMAIL, PASSWORD);
 		passwordEncoder = new BCryptPasswordEncoder();
 		authService = new AuthService(accountService, passwordEncoder, authenticationManager, userDetailsService,
-				jwtProvider, jwtProperties, userService);
+				jwtService, jwtProperties, userService);
 	}
 	@Nested
 	class Register {
@@ -87,7 +87,7 @@ class AuthServiceTest {
         {
             when(userDetailsService.loadUserByUsername(registerRequest.email()))
                     .thenReturn(userPrincipal);
-            when(jwtProvider.generateToken(userPrincipal))
+            when(jwtService.generateToken(userPrincipal))
                     .thenReturn("fake-jwt-token");
             AuthResponse response=authService.register(registerRequest);
             assertNotNull(response.accessToken());
@@ -116,4 +116,5 @@ class AuthServiceTest {
 		}
 
 	}
+
 }

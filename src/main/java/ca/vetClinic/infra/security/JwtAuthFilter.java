@@ -21,8 +21,7 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-	private final JwtValidator jwtValidator;
-	private final JwtExtractor jwtExtractor;
+	private final JwtService jwtService;
 	private final UserDetailsService userDetailsService;
 
 	@Override
@@ -43,12 +42,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		}
 
 		String token = authHeader.substring(7);
-		if (!jwtValidator.isValid(token)) {
+		if (!jwtService.isValid(token)) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
 			return;
 		}
 
-		String username = jwtExtractor.extractUsername(token);
+		String username = jwtService.extractUsername(token);
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,

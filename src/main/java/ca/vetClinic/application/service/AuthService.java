@@ -11,7 +11,7 @@ import ca.vetClinic.domain.repository.AccountRepository;
 import ca.vetClinic.domain.service.AccountService;
 import ca.vetClinic.domain.service.UserService;
 import ca.vetClinic.infra.security.JwtProperties;
-import ca.vetClinic.infra.security.JwtProvider;
+import ca.vetClinic.infra.security.JwtService;
 import ca.vetClinic.infra.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,7 +29,7 @@ public class AuthService {
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
 	private final UserDetailsService userDetailsService;
-	private final JwtProvider jwtProvider;
+	private final JwtService jwtService;
 	private final JwtProperties jwtProperties;
 	private final UserService userService;
 
@@ -44,7 +44,7 @@ public class AuthService {
 				null);
 		userService.save(user);
 		UserPrincipal userPrincipal = (UserPrincipal) userDetailsService.loadUserByUsername(request.email());
-		String token = jwtProvider.generateToken(userPrincipal);
+		String token = jwtService.generateToken(userPrincipal);
 
 		return new AuthResponse(token, "Bearer", jwtProperties.getExpiration());
 	}
@@ -54,7 +54,7 @@ public class AuthService {
 				.authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
 
 		UserPrincipal userPrincipal = (UserPrincipal) userDetailsService.loadUserByUsername(request.email());
-		String token = jwtProvider.generateToken(userPrincipal);
+		String token = jwtService.generateToken(userPrincipal);
 
 		return new AuthResponse(token, "Bearer", jwtProperties.getExpiration());
 	}
