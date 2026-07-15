@@ -1,7 +1,6 @@
 package ca.vetClinic.domain.service;
 
 import ca.vetClinic.application.command.UpdateUserCmd;
-import ca.vetClinic.application.command.UpdateEmailCmd;
 import ca.vetClinic.domain.model.User;
 
 import java.util.List;
@@ -16,7 +15,7 @@ public interface UserService {
 
 	void deleteById(UUID id);
 
-	User findByAccountId(UUID id);
+	User findByAccountId(UUID accountId);
 
 	void updateUser(UUID accountId, UpdateUserCmd cmd);
 

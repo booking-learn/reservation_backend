@@ -3,6 +3,7 @@ package ca.vetClinic.api.controller;
 import ca.vetClinic.api.dto.request.UpdateEmailRequest;
 import ca.vetClinic.api.dto.request.UpdatePasswordRequest;
 import ca.vetClinic.api.dto.request.UpdateUserRequest;
+import ca.vetClinic.api.dto.response.UserResponse;
 import ca.vetClinic.application.command.UpdateEmailCmd;
 import ca.vetClinic.application.command.UpdatePasswordCmd;
 import ca.vetClinic.application.command.UpdateUserCmd;
@@ -11,13 +12,14 @@ import ca.vetClinic.domain.service.AccountService;
 import ca.vetClinic.domain.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class User {
 	private final UserService userService;
@@ -46,5 +48,13 @@ public class User {
 		UpdatePasswordCmd cmd = new UpdatePasswordCmd(request.oldPassword(), request.newPassword());
 		accountService.updatePassword(account.getId(), cmd);
 		return ResponseEntity.noContent().build();
+	}
+	@GetMapping("/me")
+	public ResponseEntity<UserResponse> getMe(@AuthenticationPrincipal UserDetails user) {
+		Account account = accountService.findByEmail(user.getUsername());
+		ca.vetClinic.domain.model.User specificUser = userService.findByAccountId(account.getId());
+		UserResponse response = new UserResponse(specificUser.getFirstName(), specificUser.getLastName(),
+				specificUser.getPhoneNumber());
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 }

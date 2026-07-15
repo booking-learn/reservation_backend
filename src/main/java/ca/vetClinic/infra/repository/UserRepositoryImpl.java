@@ -36,12 +36,12 @@ public class UserRepositoryImpl implements UserRepository {
 	@Override
 	public void save(User user) {
 		if (user.getId() != null) {
-			UserEntity existing = jpaRepository.findById(user.getId())
+			UserEntity existingUser = jpaRepository.findById(user.getId())
 					.orElseThrow(() -> new NotFoundException("User not found with id: " + user.getId()));
-			existing.setFirstName(user.getFirstName());
-			existing.setLastName(user.getLastName());
-			existing.setPhoneNumber(user.getPhoneNumber());
-			jpaRepository.save(existing);
+			existingUser.setFirstName(user.getFirstName());
+			existingUser.setLastName(user.getLastName());
+			existingUser.setPhoneNumber(user.getPhoneNumber());
+			jpaRepository.save(existingUser);
 			return;
 		}
 		AccountEntity accountEntity = accountJpaRepository.findById(user.getAccountId())
