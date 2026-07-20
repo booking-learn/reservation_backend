@@ -8,9 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import tools.jackson.databind.json.JsonMapper;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UserE2ETest extends BaseE2ETest {
@@ -178,6 +177,16 @@ public class UserE2ETest extends BaseE2ETest {
 							  "newPassword": ""
 							}
 							""")).andExpect(status().isBadRequest());
+		}
+	}
+	@Nested
+	class Get {
+		@Test
+		void givenWhenValidUpdateUser_thenOkAndReturnBody() throws Exception {
+			mockMvc.perform(get("/user/me").header("Authorization", "Bearer " + accessToken)).andExpect(status().isOk())
+					.andExpect(jsonPath("$.firstName").value("Test")).andExpect(jsonPath("$.lastName").value("User"))
+					.andExpect(jsonPath("$.phoneNumber").value("83783692988"));
+
 		}
 	}
 }

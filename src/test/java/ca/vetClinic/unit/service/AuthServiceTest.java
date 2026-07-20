@@ -6,6 +6,7 @@ import ca.vetClinic.api.dto.response.AuthResponse;
 import ca.vetClinic.application.service.AuthService;
 import ca.vetClinic.domain.exception.ConflictException;
 import ca.vetClinic.domain.model.Account;
+import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.service.AccountService;
 import ca.vetClinic.domain.service.UserService;
 import ca.vetClinic.infra.security.JwtProperties;
@@ -55,7 +56,9 @@ class AuthServiceTest {
 	@Mock
 	private UserService userService;
 	@Captor
-	ArgumentCaptor<Account> captor;
+	ArgumentCaptor<Account> accountCaptor;
+	@Captor
+	ArgumentCaptor<User> userCaptor;
 	private RegisterRequest registerRequest;
 	private LoginRequest loginRequest;
 	private AuthService authService;
@@ -73,7 +76,12 @@ class AuthServiceTest {
 		@Test
 		void givenWhenValidRequest_thenRegister() {
 			authService.register(registerRequest);
-			verify(accountService).save(captor.capture());
+			verify(accountService).save(accountCaptor.capture());
+		}
+		@Test
+		void givenWhenValidRequest_thenCreateUser() {
+			authService.register(registerRequest);
+			verify(userService).save(userCaptor.capture());
 		}
 		@Test
         void givenWhenEmailExists_thenThrowConflictException()
