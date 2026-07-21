@@ -14,9 +14,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -57,4 +61,21 @@ public class User {
 				specificUser.getPhoneNumber());
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
+	@PreAuthorize("hasRole('IT_ADMIN')")
+	@GetMapping("/{id}")
+	public ResponseEntity<UserResponse> getUser(@PathVariable UUID id) {
+		ca.vetClinic.domain.model.User specificUser = userService.findById(id);
+		UserResponse response = new UserResponse(specificUser.getFirstName(), specificUser.getLastName(),
+				specificUser.getPhoneNumber());
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+	@PreAuthorize("hasRole('IT_ADMIN')")
+	@GetMapping
+	public ResponseEntity<List<UserResponse>> getAllUsers() {
+		List<ca.vetClinic.domain.model.User> users = userService.findAll();
+		List<UserResponse> response = users.stream()
+				.map(user -> new UserResponse(user.getFirstName(), user.getLastName(), user.getPhoneNumber())).toList();
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
 }
