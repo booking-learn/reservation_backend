@@ -182,11 +182,22 @@ public class UserE2ETest extends BaseE2ETest {
 	@Nested
 	class Get {
 		@Test
-		void givenWhenValidUpdateUser_thenOkAndReturnBody() throws Exception {
+		void givenWhenGetMe_thenOkAndReturnBody() throws Exception {
 			mockMvc.perform(get("/user/me").header("Authorization", "Bearer " + accessToken)).andExpect(status().isOk())
 					.andExpect(jsonPath("$.firstName").value("Test")).andExpect(jsonPath("$.lastName").value("User"))
 					.andExpect(jsonPath("$.phoneNumber").value("83783692988"));
 
+		}
+		@Test
+		void givenNonAdminRole_whenGetAllUsers_thenForbiddenStatus() throws Exception {
+			mockMvc.perform(get("/user").header("Authorization", "Bearer " + accessToken))
+					.andExpect(status().isForbidden());
+		}
+		@Test
+		void givenNonAdminRole_whenGetUser_thenForbiddenStatus() throws Exception {
+			mockMvc.perform(
+					get("/user/{id}", java.util.UUID.randomUUID()).header("Authorization", "Bearer " + accessToken))
+					.andExpect(status().isForbidden());
 		}
 	}
 }
