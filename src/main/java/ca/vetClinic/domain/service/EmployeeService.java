@@ -1,5 +1,7 @@
 package ca.vetClinic.domain.service;
 
+import ca.vetClinic.domain.enumerator.Role;
+import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.model.Employee;
 
 import java.util.List;
@@ -15,4 +17,10 @@ public interface EmployeeService {
 	void delete(UUID id);
 
 	Employee findByAccountId(UUID id);
+
+	Account createAccount(String prenom, String nom, Role role);
+
+	String createEmail(String prenom, String nom);
+
+	String createTemporaryPassword();
 }

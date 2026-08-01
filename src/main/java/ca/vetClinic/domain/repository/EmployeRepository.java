@@ -1,5 +1,6 @@
 package ca.vetClinic.domain.repository;
 
+import ca.vetClinic.domain.enumerator.Role;
 import ca.vetClinic.domain.model.Employee;
 
 import java.util.List;
@@ -9,6 +10,8 @@ public interface EmployeRepository {
 	List<Employee> findAll();
 
 	Employee findById(UUID id);
+
+	Employee findByRole(Role role);
 
 	void save(Employee employee);
 

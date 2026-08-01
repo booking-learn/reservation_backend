@@ -1,5 +1,6 @@
 package ca.vetClinic.infra.repository;
 
+import ca.vetClinic.domain.enumerator.Role;
 import ca.vetClinic.domain.exception.NotFoundException;
 import ca.vetClinic.domain.model.Employee;
 import ca.vetClinic.domain.repository.EmployeRepository;
@@ -29,7 +30,20 @@ public class EmployeRepositoryImpl implements EmployeRepository {
 	}
 
 	@Override
+	public Employee findByRole(Role role) {
+		return jpaRepository.findByRole(role).map(mapper::toDomain).orElseThrow(() -> new NotFoundException("role"));
+	}
+
+	@Override
 	public void save(Employee employee) {
+		if (employee.getId() != null) {
+			EmployeEntity savedEntity = jpaRepository.findById(employee.getId())
+					.orElseThrow(() -> new NotFoundException("id"));
+			employee.setFirstName(savedEntity.getFirstName());
+			employee.setLastName(savedEntity.getLastName());
+			jpaRepository.save(savedEntity);
+			return;
+		}
 		EmployeEntity entity = mapper.toEntity(employee);
 		jpaRepository.save(entity);
 		employee.setId(entity.getId());
