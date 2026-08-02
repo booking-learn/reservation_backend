@@ -31,7 +31,8 @@ public class EmployeRepositoryImpl implements EmployeRepository {
 
 	@Override
 	public Employee findByRole(Role role) {
-		return jpaRepository.findByRole(role).map(mapper::toDomain).orElseThrow(() -> new NotFoundException("role"));
+		return jpaRepository.findByAccount_Role(role).map(mapper::toDomain)
+				.orElseThrow(() -> new NotFoundException("role"));
 	}
 
 	@Override

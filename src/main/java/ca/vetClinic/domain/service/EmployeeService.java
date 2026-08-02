@@ -18,9 +18,11 @@ public interface EmployeeService {
 
 	Employee findByAccountId(UUID id);
 
-	Account createAccount(String prenom, String nom, Role role);
+	Account createAccount(String firstName, String name, Role role);
 
-	String createEmail(String prenom, String nom);
+	String createEmail(String firstName, String name);
 
 	String createTemporaryPassword();
+
+	void createEmployee(String firstName, String lastName, String phoneNumber, Role role);
 }

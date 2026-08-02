@@ -54,8 +54,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public Account createAccount(String prenom, String nom, Role role) {
-		String email = createEmail(prenom, nom);
+	public Account createAccount(String firstName, String name, Role role) {
+		String email = createEmail(firstName, name);
 		String password = createTemporaryPassword();
 		Account account = new Account(null, email, passwordEncoder.encode(password), role);
 		accountService.save(account);
@@ -63,10 +63,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public String createEmail(String prenom, String nom) {
+	public String createEmail(String firstName, String name) {
 		int counter = 1;
 		String domain = "vetClinic.ca";
-		String baseEmail = prenom + "." + nom;
+		String baseEmail = firstName + "." + name;
 		String email = baseEmail + "@" + domain;
 		while (accountService.existsByEmail(email)) {
 			counter++;
@@ -84,5 +84,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 			password.append(allChars.charAt(random.nextInt(allChars.length())));
 		}
 		return password.toString();
+	}
+
+	@Override
+	public void createEmployee(String firstName, String lastName, String phoneNumber, Role role) {
+		Account account = createAccount(firstName, lastName, role);
+		Employee employee = new Employee(null, account.getId(), firstName, lastName, phoneNumber);
+		save(employee);
 	}
 }
