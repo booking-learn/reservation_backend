@@ -5,6 +5,7 @@ import ca.vetClinic.application.service.UserServiceImpl;
 import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Spy;
@@ -13,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,6 +43,21 @@ class UserServiceImplTest {
 		when(userRepository.findByAccountId(uuid)).thenReturn(user);
 		userService.updateUser(user.getAccountId(), cmd);
 		verify(userRepository, times(1)).save(captor.capture());
+	}
+
+	@Nested
+	class Delete {
+		@Test
+		void givenValidId_thenDeleteIsCalledOnRepository() {
+			userService.delete(uuid);
+			verify(userRepository, times(1)).delete(uuid);
+		}
+
+		@Test
+		void givenNullId_thenThrowIllegalArgumentException() {
+			assertThrows(IllegalArgumentException.class, () -> userService.delete(null));
+			verify(userRepository, never()).delete(any());
+		}
 	}
 
 }
