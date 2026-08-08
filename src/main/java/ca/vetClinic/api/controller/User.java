@@ -77,5 +77,20 @@ public class User {
 				.map(user -> new UserResponse(user.getFirstName(), user.getLastName(), user.getPhoneNumber())).toList();
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
+    @DeleteMapping
+    public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal UserDetails user)
+    {
+        Account account = accountService.findByEmail(user.getUsername());
+        ca.vetClinic.domain.model.User specificUser=userService.findByAccountId(account.getId());
+        userService.delete(specificUser.getId());
+        return ResponseEntity.noContent().build();
+    }
+    @PreAuthorize("hasRole('IT_ADMIN')")
+    @DeleteMapping
+    public ResponseEntity<Void> deleteUserById(@PathVariable UUID id)
+    {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }
