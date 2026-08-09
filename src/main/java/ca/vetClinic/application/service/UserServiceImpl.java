@@ -3,6 +3,7 @@ package ca.vetClinic.application.service;
 import ca.vetClinic.application.command.UpdateUserCmd;
 import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.repository.UserRepository;
+import ca.vetClinic.domain.service.AccountService;
 import ca.vetClinic.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
-
+	private final AccountService accountService;
 	private void validateUUID(UUID uuid) {
 		if (uuid == null) {
 			throw new IllegalArgumentException("UUID is null");
@@ -43,7 +44,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void delete(UUID id) {
 		validateUUID(id);
+		User user = userRepository.findById(id);
+		accountService.deleteById(user.getAccountId());
 		userRepository.delete(id);
+
 	}
 
 	@Override

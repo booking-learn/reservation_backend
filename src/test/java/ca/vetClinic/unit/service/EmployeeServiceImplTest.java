@@ -99,9 +99,7 @@ class EmployeeServiceImplTest {
 		@Test
 		void givenEmployee_thenSaveIsCalledOnRepository() {
 			Employee employee = new Employee(uuid, UUID.randomUUID(), FIRST_NAME, LAST_NAME, PHONE_NUMBER);
-
 			employeeService.save(employee);
-
 			verify(employeeRepository, times(1)).save(employee);
 		}
 	}

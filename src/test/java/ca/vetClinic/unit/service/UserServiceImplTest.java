@@ -4,6 +4,7 @@ import ca.vetClinic.application.command.UpdateUserCmd;
 import ca.vetClinic.application.service.UserServiceImpl;
 import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.repository.UserRepository;
+import ca.vetClinic.domain.service.AccountService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,8 +13,10 @@ import org.mockito.Spy;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -26,6 +29,8 @@ class UserServiceImplTest {
 	private UpdateUserCmd cmd;
 	@Mock
 	private UserRepository userRepository;
+	@Mock
+	private AccountService accountService;
 	@Captor
 	private ArgumentCaptor<User> captor;
 	@Spy
@@ -34,7 +39,7 @@ class UserServiceImplTest {
 	private final UUID uuid = UUID.randomUUID();
 	@BeforeEach
 	void setUp() {
-		userService = new UserServiceImpl(userRepository);
+		userService = new UserServiceImpl(userRepository, accountService);
 		cmd = new UpdateUserCmd(FIRST_NAME, LAST_NAME, PHONE_NUMBER);
 	}
 	@Test
@@ -49,14 +54,64 @@ class UserServiceImplTest {
 	class Delete {
 		@Test
 		void givenValidId_thenDeleteIsCalledOnRepository() {
+			/*UUID id = UUID.randomUUID();
+			doReturn(id).when(user).getAccountId();*/
+            when(userRepository.findById(uuid)).thenReturn(user);
 			userService.delete(uuid);
 			verify(userRepository, times(1)).delete(uuid);
 		}
-
 		@Test
 		void givenNullId_thenThrowIllegalArgumentException() {
 			assertThrows(IllegalArgumentException.class, () -> userService.delete(null));
 			verify(userRepository, never()).delete(any());
+		}
+		@Test
+		void givenValidId_thenDeleteIsCalledOnAccountService() {
+			UUID id = UUID.randomUUID();
+			doReturn(id).when(user).getAccountId();
+			when(userRepository.findById(uuid)).thenReturn(user);
+			userService.delete(uuid);
+			verify(accountService, times(1)).deleteById(id);
+		}
+	}
+	@Nested
+	class Find {
+		@Test
+		void thenReturnAllUsers() {
+			List<User> users = List.of(new User(uuid, UUID.randomUUID(), FIRST_NAME, LAST_NAME, PHONE_NUMBER, null));
+			when(userRepository.findAll()).thenReturn(users);
+
+			List<User> result = userService.findAll();
+
+			assertEquals(users, result);
+		}
+		@Test
+		void givenValidId_thenReturnUser() {
+			User user = new User(uuid, UUID.randomUUID(), FIRST_NAME, LAST_NAME, PHONE_NUMBER, null);
+			when(userRepository.findById(uuid)).thenReturn(user);
+
+			User result = userService.findById(uuid);
+
+			assertEquals(user, result);
+		}
+		@Test
+		void givenNullId_thenThrowIllegalArgumentException() {
+			assertThrows(IllegalArgumentException.class, () -> userService.findById(null));
+			verify(userRepository, never()).findById(any());
+		}
+		@Test
+		void givenValidAccountId_thenReturnUser() {
+			User user = new User(uuid, UUID.randomUUID(), FIRST_NAME, LAST_NAME, PHONE_NUMBER, null);
+			when(userRepository.findByAccountId(uuid)).thenReturn(user);
+
+			User result = userService.findByAccountId(uuid);
+
+			assertEquals(user, result);
+		}
+		@Test
+		void givenNullAccountId_thenThrowIllegalArgumentException() {
+			assertThrows(IllegalArgumentException.class, () -> userService.findByAccountId(null));
+			verify(userRepository, never()).findByAccountId(any());
 		}
 	}
 

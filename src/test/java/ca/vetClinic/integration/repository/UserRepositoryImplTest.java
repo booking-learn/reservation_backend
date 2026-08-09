@@ -63,7 +63,6 @@ class UserRepositoryImplTest extends AbstractContainerBase {
 		repository.save(user);
 
 		User found = repository.findById(user.getId());
-
 		assertEquals(user.getFirstName(), found.getFirstName());
 		assertEquals(user.getAccountId(), found.getAccountId());
 	}
