@@ -38,24 +38,17 @@ class UserRepositoryImplTest extends AbstractContainerBase {
 
 	@Autowired
 	private UserRepository repository;
-
 	@Autowired
 	private AccountRepository accountRepository;
-
-	@BeforeEach
-	void setUp() {
-	}
 
 	private Account createAndSaveAccount(String email) {
 		Account account = new Account(null, email, PASSWORD, Role.USER);
 		accountRepository.save(account);
 		return accountRepository.findByEmail(email);
 	}
-
 	private User createUser(UUID accountId) {
 		return new User(null, accountId, FIRST_NAME, LAST_NAME, PHONE_NUMBER, Instant.now());
 	}
-
 	@Test
 	void givenUserSaved_thenFindByIdPresent() {
 		Account account = createAndSaveAccount(EMAIL);

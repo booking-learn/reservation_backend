@@ -40,8 +40,9 @@ public class EmployeRepositoryImpl implements EmployeRepository {
 		if (employee.getId() != null) {
 			EmployeEntity savedEntity = jpaRepository.findById(employee.getId())
 					.orElseThrow(() -> new NotFoundException("id"));
-			employee.setFirstName(savedEntity.getFirstName());
-			employee.setLastName(savedEntity.getLastName());
+			savedEntity.setFirstName(employee.getFirstName());
+			savedEntity.setLastName(employee.getLastName());
+			savedEntity.setPhoneNumber(employee.getPhoneNumber());
 			jpaRepository.save(savedEntity);
 			return;
 		}
