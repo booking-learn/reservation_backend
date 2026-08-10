@@ -1,7 +1,7 @@
 package ca.vetClinic.unit.service;
 
-import ca.vetClinic.api.dto.request.RegisterRequest;
-import ca.vetClinic.api.dto.request.LoginRequest;
+import ca.vetClinic.api.dto.request.RegisterReq;
+import ca.vetClinic.api.dto.request.LoginReq;
 import ca.vetClinic.api.dto.response.AuthResponse;
 import ca.vetClinic.application.service.AuthService;
 import ca.vetClinic.domain.exception.ConflictException;
@@ -59,13 +59,13 @@ class AuthServiceTest {
 	ArgumentCaptor<Account> accountCaptor;
 	@Captor
 	ArgumentCaptor<User> userCaptor;
-	private RegisterRequest registerRequest;
-	private LoginRequest loginRequest;
+	private RegisterReq registerReq;
+	private LoginReq loginReq;
 	private AuthService authService;
 	@BeforeEach
 	void setUp() {
-		registerRequest = new RegisterRequest(VALID_EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER);
-		loginRequest = new LoginRequest(VALID_EMAIL, PASSWORD);
+		registerReq = new RegisterReq(VALID_EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER);
+		loginReq = new LoginReq(VALID_EMAIL, PASSWORD);
 		passwordEncoder = new BCryptPasswordEncoder();
 		authService = new AuthService(accountService, passwordEncoder, authenticationManager, userDetailsService,
 				jwtService, jwtProperties, userService);
@@ -75,12 +75,12 @@ class AuthServiceTest {
 
 		@Test
 		void givenWhenValidRequest_thenRegister() {
-			authService.register(registerRequest);
+			authService.register(registerReq);
 			verify(accountService).save(accountCaptor.capture());
 		}
 		@Test
 		void givenWhenValidRequest_thenCreateUser() {
-			authService.register(registerRequest);
+			authService.register(registerReq);
 			verify(userService).save(userCaptor.capture());
 		}
 		@Test
@@ -88,16 +88,16 @@ class AuthServiceTest {
         {
             when(accountService.existsByEmail(VALID_EMAIL)).thenReturn(true);
             assertThrows(ConflictException.class,
-                    () -> authService.register(new RegisterRequest(VALID_EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER)));
+                    () -> authService.register(new RegisterReq(VALID_EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER)));
         }
 		@Test
         void givenWhenValidRequest_thenGenerateToken()
         {
-            when(userDetailsService.loadUserByUsername(registerRequest.email()))
+            when(userDetailsService.loadUserByUsername(registerReq.email()))
                     .thenReturn(userPrincipal);
             when(jwtService.generateToken(userPrincipal))
                     .thenReturn("fake-jwt-token");
-            AuthResponse response=authService.register(registerRequest);
+            AuthResponse response=authService.register(registerReq);
             assertNotNull(response.accessToken());
         }
 	}
@@ -105,21 +105,21 @@ class AuthServiceTest {
 	class Login {
 		@BeforeEach
 		void setUp() {
-			authService.register(registerRequest);
+			authService.register(registerReq);
 		}
 		@Test
 		void givenWhenValidRequest_thenLogin() {
-			AuthResponse response = authService.login(loginRequest);
+			AuthResponse response = authService.login(loginReq);
 			assertNotNull(response);
 		}
 		@Test
 		void givenWhenInvalidEmail_thenLoginFail() {
-			AuthResponse response = authService.login(new LoginRequest(INVALID_EMAIL, PASSWORD));
+			AuthResponse response = authService.login(new LoginReq(INVALID_EMAIL, PASSWORD));
 			assertNull(response.accessToken());
 		}
 		@Test
 		void givenWhenInvalidPassword_thenLoginFail() {
-			AuthResponse response = authService.login(new LoginRequest(VALID_EMAIL, INVALID_PASSWORD));
+			AuthResponse response = authService.login(new LoginReq(VALID_EMAIL, INVALID_PASSWORD));
 			assertNull(response.accessToken());
 		}
 

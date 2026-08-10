@@ -1,8 +1,11 @@
 package ca.vetClinic.application.service;
 
+import ca.vetClinic.application.command.UpdateEmployeeCmd;
+import ca.vetClinic.application.command.UpdatePasswordCmd;
 import ca.vetClinic.domain.enumerator.Role;
 import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.model.Employee;
+import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.repository.EmployeRepository;
 import ca.vetClinic.domain.service.AccountService;
 import ca.vetClinic.domain.service.EmployeeService;
@@ -38,12 +41,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public void save(Employee employee) {
+		if (employee.getAccountId() == null) {
+			throw new IllegalArgumentException("Account id is null");
+		}
 		employeRepository.save(employee);
 	}
 
 	@Override
 	public void delete(UUID id) {
 		validateUUID(id);
+		Employee employee = employeRepository.findById(id);
+		accountService.deleteById(employee.getAccountId());
 		employeRepository.delete(id);
 	}
 
@@ -92,4 +100,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Employee employee = new Employee(null, account.getId(), firstName, lastName, phoneNumber);
 		save(employee);
 	}
+
+	@Override
+	public void updateEmployee(UUID accountId, UpdateEmployeeCmd cmd) {
+		validateUUID(accountId);
+		Employee employee = findByAccountId(accountId);
+		employee.setFirstName(cmd.firstName());
+		employee.setLastName(cmd.lastName());
+		employee.setPhoneNumber(cmd.phoneNumber());
+		save(employee);
+	}
+
 }

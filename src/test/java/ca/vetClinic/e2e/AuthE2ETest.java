@@ -1,7 +1,7 @@
 package ca.vetClinic.e2e;
 
-import ca.vetClinic.api.dto.request.LoginRequest;
-import ca.vetClinic.api.dto.request.RegisterRequest;
+import ca.vetClinic.api.dto.request.LoginReq;
+import ca.vetClinic.api.dto.request.RegisterReq;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -115,36 +115,35 @@ public class AuthE2ETest extends BaseE2ETest {
 
 		@BeforeEach
 		void setUp() throws Exception {
-			RegisterRequest registerRequest = new RegisterRequest("test@email.com", "password123", "John", "Doe",
-					"+14181234567");
+			RegisterReq registerReq = new RegisterReq("test@email.com", "password123", "John", "Doe", "+14181234567");
 
 			mockMvc.perform(post("/auth/register").contentType(MediaType.APPLICATION_JSON)
-					.content(jsonMapper.writeValueAsString(registerRequest))).andExpect(status().is(201));
+					.content(jsonMapper.writeValueAsString(registerReq))).andExpect(status().is(201));
 		}
 
 		@Test
 		void givenWhenValidCredentials_thenSuccess() throws Exception {
-			LoginRequest loginRequest = new LoginRequest("test@email.com", "password123");
+			LoginReq loginReq = new LoginReq("test@email.com", "password123");
 
 			mockMvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON)
-					.content(jsonMapper.writeValueAsString(loginRequest))).andExpect(status().isOk());
+					.content(jsonMapper.writeValueAsString(loginReq))).andExpect(status().isOk());
 		}
 
 		@Test
 		void givenWhenInvalidEmail_thenBadRequestStatus() throws Exception {
-			LoginRequest loginRequest = new LoginRequest("testemail.com", "password123");
+			LoginReq loginReq = new LoginReq("testemail.com", "password123");
 
 			mockMvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON)
-					.content(jsonMapper.writeValueAsString(loginRequest))).andExpect(status().isBadRequest())
+					.content(jsonMapper.writeValueAsString(loginReq))).andExpect(status().isBadRequest())
 					.andExpect(jsonPath("$.token").doesNotExist());
 		}
 
 		@Test
 		void givenWhenInvalidPassword_thenBadRequestStatus() throws Exception {
-			LoginRequest loginRequest = new LoginRequest("test@email.com", "password13");
+			LoginReq loginReq = new LoginReq("test@email.com", "password13");
 
 			mockMvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON)
-					.content(jsonMapper.writeValueAsString(loginRequest))).andExpect(status().isUnauthorized())
+					.content(jsonMapper.writeValueAsString(loginReq))).andExpect(status().isUnauthorized())
 					.andExpect(jsonPath("$.token").doesNotExist());
 		}
 	}

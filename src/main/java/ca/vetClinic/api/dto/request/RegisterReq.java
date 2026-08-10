@@ -2,7 +2,7 @@ package ca.vetClinic.api.dto.request;
 
 import jakarta.validation.constraints.*;
 
-public record RegisterRequest(
+public record RegisterReq(
 		@NotBlank(message = "The email is required") @Email(message = "The email format is not valid") @NotNull String email,
 		@NotBlank(message = "The password is required") @NotNull String password,
 		@NotBlank(message = "The firstName is required") @NotNull String firstName,

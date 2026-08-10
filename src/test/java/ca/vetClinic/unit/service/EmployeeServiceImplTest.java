@@ -1,5 +1,6 @@
 package ca.vetClinic.unit.service;
 
+import ca.vetClinic.application.command.UpdateEmployeeCmd;
 import ca.vetClinic.application.service.EmployeeServiceImpl;
 import ca.vetClinic.domain.enumerator.Role;
 import ca.vetClinic.domain.model.Account;
@@ -30,6 +31,9 @@ class EmployeeServiceImplTest {
 	private final String FIRST_NAME = "jacob";
 	private final String LAST_NAME = "houle";
 	private final String PHONE_NUMBER = "1234567890";
+	private final String NEW_FIRST_NAME = "gontran";
+	private final String NEW_LAST_NAME = "matondo";
+	private final String NEW_PHONE_NUMBER = "1294567890";
 	private final UUID uuid = UUID.randomUUID();
 
 	@Mock
@@ -40,13 +44,17 @@ class EmployeeServiceImplTest {
 	private ArgumentCaptor<Account> accountCaptor;
 	@Spy
 	private AccountService accountService;
+	private Employee employee;
 	private PasswordEncoder passwordEncoder;
 	private EmployeeService employeeService;
+	private UpdateEmployeeCmd cmd;
 
 	@BeforeEach
 	void setUp() {
+		employee = spy(new Employee(null, UUID.randomUUID(), FIRST_NAME, LAST_NAME, PHONE_NUMBER));
 		passwordEncoder = new BCryptPasswordEncoder();
 		employeeService = new EmployeeServiceImpl(employeeRepository, accountService, passwordEncoder);
+		cmd = new UpdateEmployeeCmd(NEW_FIRST_NAME, NEW_LAST_NAME, NEW_PHONE_NUMBER);
 	}
 
 	@Nested
@@ -98,7 +106,6 @@ class EmployeeServiceImplTest {
 	class Save {
 		@Test
 		void givenEmployee_thenSaveIsCalledOnRepository() {
-			Employee employee = new Employee(uuid, UUID.randomUUID(), FIRST_NAME, LAST_NAME, PHONE_NUMBER);
 			employeeService.save(employee);
 			verify(employeeRepository, times(1)).save(employee);
 		}
@@ -108,6 +115,7 @@ class EmployeeServiceImplTest {
 	class Delete {
 		@Test
 		void givenValidId_thenDeleteIsCalledOnRepository() {
+            when(employeeRepository.findById(uuid)).thenReturn(employee);
 			employeeService.delete(uuid);
 			verify(employeeRepository, times(1)).delete(uuid);
 		}
@@ -116,6 +124,17 @@ class EmployeeServiceImplTest {
 		void givenNullId_thenThrowIllegalArgumentException() {
 			assertThrows(IllegalArgumentException.class, () -> employeeService.delete(null));
 			verify(employeeRepository, never()).delete(any());
+		}
+	}
+
+	@Nested
+	class Update {
+		@Test
+		void givenWhenValidUpdateUserCmd_thenUserIsUpdated() {
+			doReturn(uuid).when(employee).getAccountId();
+			when(employeeRepository.findByAccountId(uuid)).thenReturn(employee);
+			employeeService.updateEmployee(employee.getAccountId(), cmd);
+			verify(employeeRepository, times(1)).save(employeeCaptor.capture());
 		}
 	}
 

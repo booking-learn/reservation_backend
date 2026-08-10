@@ -1,13 +1,12 @@
 package ca.vetClinic.application.service;
 
-import ca.vetClinic.api.dto.request.LoginRequest;
-import ca.vetClinic.api.dto.request.RegisterRequest;
+import ca.vetClinic.api.dto.request.LoginReq;
+import ca.vetClinic.api.dto.request.RegisterReq;
 import ca.vetClinic.api.dto.response.AuthResponse;
 import ca.vetClinic.domain.enumerator.Role;
 import ca.vetClinic.domain.exception.ConflictException;
 import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.model.User;
-import ca.vetClinic.domain.repository.AccountRepository;
 import ca.vetClinic.domain.service.AccountService;
 import ca.vetClinic.domain.service.UserService;
 import ca.vetClinic.infra.security.JwtProperties;
@@ -34,7 +33,7 @@ public class AuthService {
 	private final UserService userService;
 
 	@Transactional
-	public AuthResponse register(RegisterRequest request) {
+	public AuthResponse register(RegisterReq request) {
 		if (accountService.existsByEmail(request.email())) {
 			throw new ConflictException("The account with this email already exists!");
 		}
@@ -49,7 +48,7 @@ public class AuthService {
 		return new AuthResponse(token, "Bearer", jwtProperties.getExpiration());
 	}
 
-	public AuthResponse login(LoginRequest request) {
+	public AuthResponse login(LoginReq request) {
 		authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
 

@@ -26,6 +26,9 @@ class UserServiceImplTest {
 	private final String FIRST_NAME = "jacob";
 	private final String LAST_NAME = "houle";
 	private final String PHONE_NUMBER = "1234567890";
+	private final String NEW_FIRST_NAME = "gontran";
+	private final String NEW_LAST_NAME = "matondo";
+	private final String NEW_PHONE_NUMBER = "1294567890";
 	private UpdateUserCmd cmd;
 	@Mock
 	private UserRepository userRepository;
@@ -40,22 +43,23 @@ class UserServiceImplTest {
 	@BeforeEach
 	void setUp() {
 		userService = new UserServiceImpl(userRepository, accountService);
-		cmd = new UpdateUserCmd(FIRST_NAME, LAST_NAME, PHONE_NUMBER);
+		cmd = new UpdateUserCmd(NEW_FIRST_NAME, NEW_LAST_NAME, NEW_PHONE_NUMBER);
 	}
-	@Test
-	void givenWhenValidUpdateUserCmd_thenUserIsUpdated() {
-		doReturn(uuid).when(user).getAccountId();
-		when(userRepository.findByAccountId(uuid)).thenReturn(user);
-		userService.updateUser(user.getAccountId(), cmd);
-		verify(userRepository, times(1)).save(captor.capture());
+	@Nested
+	class Update {
+		@Test
+		void givenWhenValidUpdateUserCmd_thenUserIsUpdated() {
+			doReturn(uuid).when(user).getAccountId();
+			when(userRepository.findByAccountId(uuid)).thenReturn(user);
+			userService.updateUser(user.getAccountId(), cmd);
+			verify(userRepository, times(1)).save(captor.capture());
+		}
 	}
 
 	@Nested
 	class Delete {
 		@Test
 		void givenValidId_thenDeleteIsCalledOnRepository() {
-			/*UUID id = UUID.randomUUID();
-			doReturn(id).when(user).getAccountId();*/
             when(userRepository.findById(uuid)).thenReturn(user);
 			userService.delete(uuid);
 			verify(userRepository, times(1)).delete(uuid);

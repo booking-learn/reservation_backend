@@ -1,7 +1,7 @@
 package ca.vetClinic.api.controller;
 
-import ca.vetClinic.api.dto.request.LoginRequest;
-import ca.vetClinic.api.dto.request.RegisterRequest;
+import ca.vetClinic.api.dto.request.LoginReq;
+import ca.vetClinic.api.dto.request.RegisterReq;
 import ca.vetClinic.api.dto.response.AuthResponse;
 import ca.vetClinic.application.service.AuthService;
 import jakarta.validation.Valid;
@@ -18,12 +18,12 @@ public class Authentification {
 	private final AuthService authService;
 
 	@PostMapping("/register")
-	public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+	public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterReq request) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(request));
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+	public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginReq request) {
 		return ResponseEntity.ok(authService.login(request));
 	}
 

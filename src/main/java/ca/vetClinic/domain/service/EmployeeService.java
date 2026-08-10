@@ -1,5 +1,7 @@
 package ca.vetClinic.domain.service;
 
+import ca.vetClinic.application.command.UpdateEmployeeCmd;
+import ca.vetClinic.application.command.UpdatePasswordCmd;
 import ca.vetClinic.domain.enumerator.Role;
 import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.model.Employee;
@@ -25,4 +27,7 @@ public interface EmployeeService {
 	String createTemporaryPassword();
 
 	void createEmployee(String firstName, String lastName, String phoneNumber, Role role);
+
+	void updateEmployee(UUID accountId, UpdateEmployeeCmd cmd);
+
 }

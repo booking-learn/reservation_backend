@@ -1,8 +1,8 @@
 package ca.vetClinic.api.controller;
 
-import ca.vetClinic.api.dto.request.UpdateEmailRequest;
-import ca.vetClinic.api.dto.request.UpdatePasswordRequest;
-import ca.vetClinic.api.dto.request.UpdateUserRequest;
+import ca.vetClinic.api.dto.request.UpdateEmailReq;
+import ca.vetClinic.api.dto.request.UpdatePasswordReq;
+import ca.vetClinic.api.dto.request.UpdateUserReq;
 import ca.vetClinic.api.dto.response.UserResponse;
 import ca.vetClinic.application.command.UpdateEmailCmd;
 import ca.vetClinic.application.command.UpdatePasswordCmd;
@@ -31,7 +31,7 @@ public class User {
 
 	@PutMapping
 	public ResponseEntity<Void> update(@AuthenticationPrincipal UserDetails user,
-			@RequestBody @Valid UpdateUserRequest request) {
+			@RequestBody @Valid UpdateUserReq request) {
 		Account account = accountService.findByEmail(user.getUsername());
 		UpdateUserCmd cmd = new UpdateUserCmd(request.firstName(), request.lastName(), request.phoneNumber());
 		userService.updateUser(account.getId(), cmd);
@@ -39,7 +39,7 @@ public class User {
 	}
 	@PatchMapping("/email")
 	public ResponseEntity<Void> updateEmail(@AuthenticationPrincipal UserDetails user,
-			@RequestBody @Valid UpdateEmailRequest request) {
+			@RequestBody @Valid UpdateEmailReq request) {
 		Account account = accountService.findByEmail(user.getUsername());
 		UpdateEmailCmd cmd = new UpdateEmailCmd(request.oldEmail(), request.newEmail());
 		accountService.updateEmail(account.getId(), cmd);
@@ -47,7 +47,7 @@ public class User {
 	}
 	@PatchMapping("/password")
 	public ResponseEntity<Void> updatePassword(@AuthenticationPrincipal UserDetails user,
-			@RequestBody @Valid UpdatePasswordRequest request) {
+			@RequestBody @Valid UpdatePasswordReq request) {
 		Account account = accountService.findByEmail(user.getUsername());
 		UpdatePasswordCmd cmd = new UpdatePasswordCmd(request.oldPassword(), request.newPassword());
 		accountService.updatePassword(account.getId(), cmd);
