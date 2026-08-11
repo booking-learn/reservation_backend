@@ -42,16 +42,16 @@ class EmployeeServiceImplTest {
 	private ArgumentCaptor<Employee> employeeCaptor;
 	@Captor
 	private ArgumentCaptor<Account> accountCaptor;
-	@Spy
+	@Mock
 	private AccountService accountService;
-	private Employee employee;
+	@Spy
+	private Employee employee = new Employee(null, UUID.randomUUID(), FIRST_NAME, LAST_NAME, PHONE_NUMBER);
 	private PasswordEncoder passwordEncoder;
 	private EmployeeService employeeService;
 	private UpdateEmployeeCmd cmd;
 
 	@BeforeEach
 	void setUp() {
-		employee = spy(new Employee(null, UUID.randomUUID(), FIRST_NAME, LAST_NAME, PHONE_NUMBER));
 		passwordEncoder = new BCryptPasswordEncoder();
 		employeeService = new EmployeeServiceImpl(employeeRepository, accountService, passwordEncoder);
 		cmd = new UpdateEmployeeCmd(NEW_FIRST_NAME, NEW_LAST_NAME, NEW_PHONE_NUMBER);
@@ -87,7 +87,6 @@ class EmployeeServiceImplTest {
 
 		@Test
 		void givenValidAccountId_thenReturnEmployee() {
-			Employee employee = new Employee(uuid, UUID.randomUUID(), FIRST_NAME, LAST_NAME, PHONE_NUMBER);
 			when(employeeRepository.findByAccountId(uuid)).thenReturn(employee);
 
 			Employee result = employeeService.findByAccountId(uuid);
@@ -148,7 +147,7 @@ class EmployeeServiceImplTest {
 
 		@Test
 		void givenValidName_thenCreateUniqueEmail() {
-			doReturn(true).when(accountService).existsByEmail("jacob.houle@vetClinic.ca");
+			when(accountService.existsByEmail("jacob.houle@vetClinic.ca")).thenReturn(true);
 			employeeService.createEmail(FIRST_NAME, LAST_NAME);
 			String email = employeeService.createEmail(FIRST_NAME, LAST_NAME);
 			assertEquals("jacob.houle2@vetClinic.ca", email);
@@ -166,6 +165,15 @@ class EmployeeServiceImplTest {
 			verify(accountService, times(1)).save(accountCaptor.capture());
 			assertTrue(account.getPassword().startsWith("$2"));
 		}
-
+		@Test
+		void givenCreateEmployee_thenReturnPassword() {
+			doAnswer(invocation -> {
+				Account acc = invocation.getArgument(0);
+				acc.setId(uuid);
+				return null;
+			}).when(accountService).save(any(Account.class));
+			String password = employeeService.createEmployee(FIRST_NAME, LAST_NAME, PHONE_NUMBER, Role.RECEPTIONIST);
+			assertNotNull(password);
+		}
 	}
 }

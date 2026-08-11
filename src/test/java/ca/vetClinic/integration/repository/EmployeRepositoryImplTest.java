@@ -62,7 +62,6 @@ class EmployeRepositoryImplTest extends AbstractContainerBase {
 	@Test
 	void givenEmployeeIdNotFound_thenThrowNotFoundException() {
 		UUID randomId = UUID.randomUUID();
-
 		assertThrows(NotFoundException.class, () -> repository.findById(randomId));
 	}
 

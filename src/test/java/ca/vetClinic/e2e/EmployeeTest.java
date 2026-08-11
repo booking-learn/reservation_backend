@@ -78,7 +78,73 @@ public class EmployeeTest extends BaseE2ETest {
 				.getContentAsString();
 		return jsonMapper.readValue(body, AuthResponse.class).accessToken();
 	}
+	@Nested
+	class Create {
 
+		@Test
+		void givenItAdmin_whenCreateEmployee_thenCreated() throws Exception {
+			mockMvc.perform(post("/employee").header("Authorization", "Bearer " + itAdminToken)
+					.contentType(MediaType.APPLICATION_JSON).content("""
+							{
+							  "firstName": "Gontran",
+							  "lastName": "Dupont",
+							  "phoneNumber": "83783692988",
+							  "role": "VETERINARIAN"
+							}
+							""")).andExpect(status().isCreated());
+		}
+		@Test
+		void givenItAdmin_whenCreateEmployee_thenReturnPassword() throws Exception {
+			mockMvc.perform(post("/employee").header("Authorization", "Bearer " + itAdminToken)
+					.contentType(MediaType.APPLICATION_JSON).content("""
+							{
+							  "firstName": "Gontran",
+							  "lastName": "Dupont",
+							  "phoneNumber": "83783692988",
+							  "role": "VETERINARIAN"
+							}
+							""")).andExpect(status().isCreated()).andExpect(jsonPath("$.password").exists())
+					.andExpect(jsonPath("$.password").isNotEmpty());
+		}
+
+		@Test
+		void givenNonAdmin_whenCreateEmployee_thenForbidden() throws Exception {
+			mockMvc.perform(post("/employee").header("Authorization", "Bearer " + nonAdminToken)
+					.contentType(MediaType.APPLICATION_JSON).content("""
+							{
+							  "firstName": "Gontran",
+							  "lastName": "Dupont",
+							  "phoneNumber": "83783692988",
+							  "role": "VETERINARIAN"
+							}
+							""")).andExpect(status().isForbidden());
+		}
+
+		@Test
+		void givenNoToken_whenCreateEmployee_thenUnauthorized() throws Exception {
+			mockMvc.perform(post("/employee").contentType(MediaType.APPLICATION_JSON).content("""
+					{
+					  "firstName": "Gontran",
+					  "lastName": "Dupont",
+					  "phoneNumber": "83783692988",
+					  "role": "VETERINARIAN"
+					}
+					""")).andExpect(status().isUnauthorized());
+		}
+
+		@Test
+		void givenInvalidFirstName_whenCreateEmployee_thenBadRequest() throws Exception {
+			mockMvc.perform(post("/employee").header("Authorization", "Bearer " + itAdminToken)
+					.contentType(MediaType.APPLICATION_JSON).content("""
+							{
+							  "firstName": "",
+							  "lastName": "Dupont",
+							  "phoneNumber": "83783692988",
+							  "role": "VETERINARIAN"
+							}
+							""")).andExpect(status().isBadRequest());
+		}
+	}
 	@Nested
 	class GetMe {
 

@@ -12,6 +12,7 @@ import ca.vetClinic.domain.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.util.List;
@@ -94,11 +95,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return password.toString();
 	}
 
+	@Transactional
 	@Override
-	public void createEmployee(String firstName, String lastName, String phoneNumber, Role role) {
+	public String createEmployee(String firstName, String lastName, String phoneNumber, Role role) {
 		Account account = createAccount(firstName, lastName, role);
 		Employee employee = new Employee(null, account.getId(), firstName, lastName, phoneNumber);
 		save(employee);
+		return account.getPassword();
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package ca.vetClinic.api.controller;
 import ca.vetClinic.api.dto.request.CreateEmployeeReq;
 import ca.vetClinic.api.dto.request.UpdateEmployeeReq;
 import ca.vetClinic.api.dto.request.UpdatePasswordReq;
+import ca.vetClinic.api.dto.response.EmplCreatedResponse;
 import ca.vetClinic.api.dto.response.EmployeeResponse;
 import ca.vetClinic.application.command.UpdateEmployeeCmd;
 import ca.vetClinic.application.command.UpdatePasswordCmd;
@@ -30,9 +31,11 @@ public class Employee {
 
 	@PreAuthorize("hasRole('IT_ADMIN')")
 	@PostMapping
-	ResponseEntity<Void> createEmployee(@Valid @RequestBody CreateEmployeeReq request) {
-		employeeService.createEmployee(request.firstName(), request.lastName(), request.phoneNumber(), request.role());
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+	ResponseEntity<EmplCreatedResponse> createEmployee(@Valid @RequestBody CreateEmployeeReq request) {
+		String password = employeeService.createEmployee(request.firstName(), request.lastName(), request.phoneNumber(),
+				request.role());
+		EmplCreatedResponse response = new EmplCreatedResponse(password);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 	@GetMapping("/me")
 	ResponseEntity<EmployeeResponse> getMe(@AuthenticationPrincipal UserDetails user) {

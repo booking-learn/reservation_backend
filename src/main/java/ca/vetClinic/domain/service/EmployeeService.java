@@ -26,7 +26,7 @@ public interface EmployeeService {
 
 	String createTemporaryPassword();
 
-	void createEmployee(String firstName, String lastName, String phoneNumber, Role role);
+	String createEmployee(String firstName, String lastName, String phoneNumber, Role role);
 
 	void updateEmployee(UUID accountId, UpdateEmployeeCmd cmd);
 
