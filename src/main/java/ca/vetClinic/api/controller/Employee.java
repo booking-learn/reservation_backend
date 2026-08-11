@@ -76,6 +76,7 @@ public class Employee {
 		accountService.updatePassword(account.getId(), cmd);
 		return ResponseEntity.noContent().build();
 	}
+	@PreAuthorize("hasRole('IT_ADMIN')")
 	@DeleteMapping("/{id}")
 	ResponseEntity<Void> deleteEmployee(@PathVariable UUID id) {
 		employeeService.delete(id);
