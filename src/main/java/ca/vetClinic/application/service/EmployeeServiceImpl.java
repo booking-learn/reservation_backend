@@ -63,9 +63,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public Account createAccount(String firstName, String name, Role role) {
+	public Account createAccount(String firstName, String name, Role role, String password) {
 		String email = createEmail(firstName, name);
-		String password = createTemporaryPassword();
 		Account account = new Account(null, email, passwordEncoder.encode(password), role);
 		account.setMustChangePassword(true);
 		accountService.save(account);
@@ -99,10 +98,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Transactional
 	@Override
 	public String createEmployee(String firstName, String lastName, String phoneNumber, Role role) {
-		Account account = createAccount(firstName, lastName, role);
+		String password = createTemporaryPassword();
+		Account account = createAccount(firstName, lastName, role, password);
 		Employee employee = new Employee(null, account.getId(), firstName, lastName, phoneNumber);
 		save(employee);
-		return account.getPassword();
+		return password;
 	}
 
 	@Override

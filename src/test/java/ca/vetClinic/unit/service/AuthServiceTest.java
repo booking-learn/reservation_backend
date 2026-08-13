@@ -4,6 +4,7 @@ import ca.vetClinic.api.dto.request.RegisterReq;
 import ca.vetClinic.api.dto.request.LoginReq;
 import ca.vetClinic.api.dto.response.AuthResponse;
 import ca.vetClinic.application.service.AuthService;
+import ca.vetClinic.domain.enumerator.Role;
 import ca.vetClinic.domain.exception.ConflictException;
 import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.model.User;
@@ -25,9 +26,12 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
@@ -109,19 +113,33 @@ class AuthServiceTest {
 		}
 		@Test
 		void givenWhenValidRequest_thenLogin() {
-			AuthResponse response = authService.login(loginReq);
-			assertNotNull(response);
+			UserPrincipal userPrincipal = UserPrincipal
+					.fromAccount(new Account(UUID.randomUUID(), VALID_EMAIL, PASSWORD, Role.VETERINARIAN));
+
+			when(userDetailsService.loadUserByUsername(VALID_EMAIL)).thenReturn(userPrincipal);
+			when(jwtService.generateToken(userPrincipal)).thenReturn("token");
+
+			AuthResponse response = authService.login(new LoginReq(VALID_EMAIL, PASSWORD));
+
+			assertNotNull(response.accessToken());
 		}
 		@Test
-		void givenWhenInvalidEmail_thenLoginFail() {
-			AuthResponse response = authService.login(new LoginReq(INVALID_EMAIL, PASSWORD));
-			assertNull(response.accessToken());
-		}
+        void givenWhenInvalidEmail_thenLoginFail() {
+            when(authenticationManager.authenticate(any()))
+                    .thenThrow(new BadCredentialsException("Invalid credentials"));
+
+            assertThrows(BadCredentialsException.class,
+                    () -> authService.login(new LoginReq(INVALID_EMAIL, PASSWORD)));
+        }
+
 		@Test
-		void givenWhenInvalidPassword_thenLoginFail() {
-			AuthResponse response = authService.login(new LoginReq(VALID_EMAIL, INVALID_PASSWORD));
-			assertNull(response.accessToken());
-		}
+        void givenWhenInvalidPassword_thenLoginFail() {
+            when(authenticationManager.authenticate(any()))
+                    .thenThrow(new BadCredentialsException("Invalid credentials"));
+
+            assertThrows(BadCredentialsException.class,
+                    () -> authService.login(new LoginReq(VALID_EMAIL, INVALID_PASSWORD)));
+        }
 
 	}
 

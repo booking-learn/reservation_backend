@@ -1,6 +1,8 @@
 package ca.vetClinic.e2e;
 
 import ca.vetClinic.api.dto.response.AuthResponse;
+import ca.vetClinic.api.dto.response.EmplCreatedResponse;
+import ca.vetClinic.api.dto.response.EmployeeResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -33,6 +35,8 @@ public class EmployeeTest extends BaseE2ETest {
 	private String itAdminToken;
 	private String nonAdminToken;
 	private String employeeToken;
+	private String employeeCreatedPassword;
+	private String employeeCreatedEmail;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -143,6 +147,34 @@ public class EmployeeTest extends BaseE2ETest {
 							  "role": "VETERINARIAN"
 							}
 							""")).andExpect(status().isBadRequest());
+		}
+	}
+	@Nested
+	class MustChangePassword {
+		@BeforeEach
+		void setup() throws Exception {
+			employeeCreatedEmail = "jo.mabiala@vetClinic.ca";
+			String body = mockMvc
+					.perform(post("/employee").header("Authorization", "Bearer " + itAdminToken)
+							.contentType(MediaType.APPLICATION_JSON).content("""
+									                   {
+									                     "firstName": "jo",
+									"lastName": "mabiala",
+									"phoneNumber": "83783692988",
+									"role": "VET_TECH"
+									                   }
+									                   """))
+					.andExpect(status().is(201)).andReturn().getResponse().getContentAsString();
+			employeeCreatedPassword = String.valueOf(jsonMapper.readValue(body, EmplCreatedResponse.class).password());
+		}
+		@Test
+		void givenEmployeeFirstLoginWithoutChangingPassword_thenForbidden() throws Exception {
+			mockMvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content("""
+					{
+					    "email": "%s",
+					    "password": "%s"
+					}
+					""".formatted(employeeCreatedEmail, employeeCreatedPassword))).andExpect(status().isForbidden());
 		}
 	}
 	@Nested

@@ -34,6 +34,7 @@ class EmployeeServiceImplTest {
 	private final String NEW_FIRST_NAME = "gontran";
 	private final String NEW_LAST_NAME = "matondo";
 	private final String NEW_PHONE_NUMBER = "1294567890";
+	private final String TEMP_PASSWORD = "password";
 	private final UUID uuid = UUID.randomUUID();
 
 	@Mock
@@ -161,17 +162,22 @@ class EmployeeServiceImplTest {
 
 		@Test
 		void givenValidInfo_thenCreateAccountWithHashedPasswordAndCorrectRole() {
-			Account account = employeeService.createAccount(FIRST_NAME, LAST_NAME, Role.RECEPTIONIST);
+			Account account = employeeService.createAccount(FIRST_NAME, LAST_NAME, Role.RECEPTIONIST, TEMP_PASSWORD);
 			verify(accountService, times(1)).save(accountCaptor.capture());
 			assertTrue(account.getPassword().startsWith("$2"));
 		}
 		@Test
+		void givenVaidInfo_thenMustChangePasswordIsTrue() {
+			Account account = employeeService.createAccount(FIRST_NAME, LAST_NAME, Role.RECEPTIONIST, TEMP_PASSWORD);
+			assertTrue(account.isMustChangePassword());
+		}
+		@Test
 		void givenCreateEmployee_thenReturnPassword() {
 			doAnswer(invocation -> {
-				Account acc = invocation.getArgument(0);
-				acc.setId(uuid);
+				Account ac = invocation.getArgument(0);
+				ac.setId(UUID.randomUUID());
 				return null;
-			}).when(accountService).save(any(Account.class));
+			}).when(accountService).save(accountCaptor.capture());
 			String password = employeeService.createEmployee(FIRST_NAME, LAST_NAME, PHONE_NUMBER, Role.RECEPTIONIST);
 			assertNotNull(password);
 		}

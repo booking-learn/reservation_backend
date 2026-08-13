@@ -20,7 +20,7 @@ public interface EmployeeService {
 
 	Employee findByAccountId(UUID id);
 
-	Account createAccount(String firstName, String name, Role role);
+	Account createAccount(String firstName, String name, Role role, String password);
 
 	String createEmail(String firstName, String name);
 

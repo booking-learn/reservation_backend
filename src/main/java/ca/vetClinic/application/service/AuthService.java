@@ -5,6 +5,7 @@ import ca.vetClinic.api.dto.request.RegisterReq;
 import ca.vetClinic.api.dto.response.AuthResponse;
 import ca.vetClinic.domain.enumerator.Role;
 import ca.vetClinic.domain.exception.ConflictException;
+import ca.vetClinic.domain.exception.ForbiddenException;
 import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.service.AccountService;
@@ -53,6 +54,11 @@ public class AuthService {
 				.authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.password()));
 
 		UserPrincipal userPrincipal = (UserPrincipal) userDetailsService.loadUserByUsername(request.email());
+
+		if (userPrincipal.isMustChangePassword()) {
+			throw new ForbiddenException("You must change the password!");
+		}
+
 		String token = jwtService.generateToken(userPrincipal);
 
 		return new AuthResponse(token, "Bearer", jwtProperties.getExpiration());

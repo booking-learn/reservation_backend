@@ -23,6 +23,8 @@ public class AccountEntity {
 	@Column(name = "password", nullable = false)
 	private String password;
 
+	private boolean mustChangePassword;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false, columnDefinition = "ENUM('VETERINARIAN','VET_TECH','RECEPTIONIST','IT_ADMIN')")
 	private Role role;
@@ -41,5 +43,6 @@ public class AccountEntity {
 		this.email = email;
 		this.password = password;
 		this.role = role;
+		this.mustChangePassword = false;
 	}
 }

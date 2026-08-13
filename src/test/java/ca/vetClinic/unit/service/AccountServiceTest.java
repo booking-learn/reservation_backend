@@ -79,6 +79,15 @@ class AccountServiceTest {
 		verify(accountRepository, times(1)).save(captor.capture());
 	}
 	@Test
+	void givenUpdatedPassword_thenIsMustChangePasswordIsFalse() {
+		doReturn(uuid).when(account).getId();
+		String oldPassword = passwordEncoder.encode(OLD_PASSWORD);
+		doReturn(oldPassword).when(account).getPassword();
+		when(accountRepository.findById(uuid)).thenReturn(account);
+		accountService.updatePassword(account.getId(), updatePasswordCmd);
+		assertFalse(account.isMustChangePassword());
+	}
+	@Test
 	void givenWhenInvalidOldPassword_thenThrowException() {
 		doReturn(OLD_PASSWORD).when(account).getPassword();
 		when(accountRepository.findById(uuid)).thenReturn(account);
