@@ -20,9 +20,11 @@ public class UserPrincipal implements UserDetails {
 	private final String email;
 	private final String password;
 	private final Role role;
+	private final boolean mustChangePassword;
 
 	public static UserPrincipal fromAccount(Account account) {
-		return new UserPrincipal(account.getId(), account.getEmail(), account.getPassword(), account.getRole());
+		return new UserPrincipal(account.getId(), account.getEmail(), account.getPassword(), account.getRole(),
+				account.isMustChangePassword());
 	}
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -10,12 +10,14 @@ public class Account {
 	private String email;
 	private String password;
 	private Role role;
+	private boolean mustChangePassword;
 
 	public Account(UUID id, String email, String password, Role role) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
 		this.role = role;
+		this.mustChangePassword = false;
 	}
 
 	public UUID getId() {
@@ -45,6 +47,14 @@ public class Account {
 	public Role getRole() {
 		return role;
 	}
+	public boolean isMustChangePassword() {
+		return mustChangePassword;
+	}
+
+	public void setMustChangePassword(boolean mustChangePassword) {
+		this.mustChangePassword = mustChangePassword;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)

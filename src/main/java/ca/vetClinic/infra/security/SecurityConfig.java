@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
 	private final JwtAuthFilter jwtAuthFilter;
+	private final PasswordChangeRequiredFilter passwordChangeRequiredFilter;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -32,7 +33,8 @@ public class SecurityConfig {
 										"/actuator/health", "/swagger-ui/index.html", "/status",
 										"/swagger-resources/**", "/webjars/**")
 								.permitAll().anyRequest().authenticated())
-				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+				.addFilterAfter(passwordChangeRequiredFilter, JwtAuthFilter.class);
 
 		return http.build();
 	}

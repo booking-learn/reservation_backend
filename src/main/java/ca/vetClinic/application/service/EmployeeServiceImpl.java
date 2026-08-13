@@ -67,6 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		String email = createEmail(firstName, name);
 		String password = createTemporaryPassword();
 		Account account = new Account(null, email, passwordEncoder.encode(password), role);
+		account.setMustChangePassword(true);
 		accountService.save(account);
 		return account;
 	}

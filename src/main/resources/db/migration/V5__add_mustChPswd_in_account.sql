@@ -1,0 +1,1 @@
+ALTER TABLE accounts ADD COLUMN `must_change_password` BOOLEAN DEFAULT FALSE;

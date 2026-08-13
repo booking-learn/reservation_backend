@@ -67,6 +67,7 @@ public class AccountServiceImpl implements AccountService {
 			throw new BadCredentialsException("Invalid password!");
 		}
 		account.setPassword(passwordEncoder.encode(cmd.newPassword()));
+		account.setMustChangePassword(false);
 		accountRepository.save(account);
 	}
 }
