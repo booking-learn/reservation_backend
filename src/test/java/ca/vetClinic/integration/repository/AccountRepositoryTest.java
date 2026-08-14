@@ -75,4 +75,38 @@ public class AccountRepositoryTest extends AbstractContainerBase {
 		List<Account> found = repository.findAll();
 		assertTrue(found.isEmpty());
 	}
+	@Test
+	void givenAccountEmailChanged_thenPersistedEmailIsUpdated() {
+		Account account = createAccount(EMAIL);
+		repository.save(account);
+		Account saved = repository.findByEmail(EMAIL);
+		saved.setEmail(OTHER_EMAIL);
+		repository.save(saved);
+		Account updated = repository.findById(saved.getId());
+		assertEquals(OTHER_EMAIL, updated.getEmail());
+	}
+
+	@Test
+	void givenAccountPasswordChanged_thenPersistedPasswordIsUpdated() {
+		Account account = createAccount(EMAIL);
+		repository.save(account);
+		Account saved = repository.findByEmail(EMAIL);
+		String newPassword = "newEncodedPassword";
+		saved.setPassword(newPassword);
+		repository.save(saved);
+		Account updated = repository.findById(saved.getId());
+		assertEquals(newPassword, updated.getPassword());
+	}
+
+	@Test
+	void givenMustChangePasswordSetFalse_thenPersistedValueIsUpdated() {
+		Account account = createAccount(EMAIL);
+		account.setMustChangePassword(true);
+		repository.save(account);
+		Account saved = repository.findByEmail(EMAIL);
+		saved.setMustChangePassword(false);
+		repository.save(saved);
+		Account updated = repository.findById(saved.getId());
+		assertFalse(updated.isMustChangePassword());
+	}
 }

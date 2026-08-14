@@ -1,8 +1,10 @@
 package ca.vetClinic.application.service;
 
+import ca.vetClinic.api.dto.request.ChangePasswordReq;
 import ca.vetClinic.api.dto.request.LoginReq;
 import ca.vetClinic.api.dto.request.RegisterReq;
 import ca.vetClinic.api.dto.response.AuthResponse;
+import ca.vetClinic.application.command.UpdatePasswordCmd;
 import ca.vetClinic.domain.enumerator.Role;
 import ca.vetClinic.domain.exception.ConflictException;
 import ca.vetClinic.domain.exception.ForbiddenException;
@@ -62,5 +64,10 @@ public class AuthService {
 		String token = jwtService.generateToken(userPrincipal);
 
 		return new AuthResponse(token, "Bearer", jwtProperties.getExpiration());
+	}
+	public void changePassword(ChangePasswordReq request) {
+		Account account = accountService.findByEmail(request.email());
+		UpdatePasswordCmd cmd = new UpdatePasswordCmd(request.oldPassword(), request.newPassword());
+		accountService.updatePassword(account.getId(), cmd);
 	}
 }

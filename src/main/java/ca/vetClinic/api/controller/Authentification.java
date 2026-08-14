@@ -1,5 +1,6 @@
 package ca.vetClinic.api.controller;
 
+import ca.vetClinic.api.dto.request.ChangePasswordReq;
 import ca.vetClinic.api.dto.request.LoginReq;
 import ca.vetClinic.api.dto.request.RegisterReq;
 import ca.vetClinic.api.dto.response.AuthResponse;
@@ -25,6 +26,11 @@ public class Authentification {
 	@PostMapping("/login")
 	public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginReq request) {
 		return ResponseEntity.ok(authService.login(request));
+	}
+	@PatchMapping("/password")
+	public ResponseEntity<Void> changePassword(@Valid @RequestBody ChangePasswordReq request) {
+		authService.changePassword(request);
+		return ResponseEntity.noContent().build();
 	}
 
 }

@@ -1,8 +1,10 @@
 package ca.vetClinic.unit.service;
 
+import ca.vetClinic.api.dto.request.ChangePasswordReq;
 import ca.vetClinic.api.dto.request.RegisterReq;
 import ca.vetClinic.api.dto.request.LoginReq;
 import ca.vetClinic.api.dto.response.AuthResponse;
+import ca.vetClinic.application.command.UpdatePasswordCmd;
 import ca.vetClinic.application.service.AuthService;
 import ca.vetClinic.domain.enumerator.Role;
 import ca.vetClinic.domain.exception.ConflictException;
@@ -38,8 +40,7 @@ class AuthServiceTest {
 
 	private final String VALID_EMAIL = "jacob@gmail.com";
 	private final String PASSWORD = "qwerty";
-	private final String INVALID_EMAIL = "jacob";
-	private final String INVALID_PASSWORD = "azerty";
+	private final String NEW_PASSWORD = "azerty";
 	private final String FIRST_NAME = "jacob";
 	private final String LAST_NAME = "houle";
 	private final String PHONE_NUMBER = "1234567890";
@@ -59,17 +60,22 @@ class AuthServiceTest {
 	private JwtProperties jwtProperties;
 	@Mock
 	private UserService userService;
+
 	@Captor
 	ArgumentCaptor<Account> accountCaptor;
 	@Captor
 	ArgumentCaptor<User> userCaptor;
+
 	private RegisterReq registerReq;
 	private LoginReq loginReq;
+	private ChangePasswordReq changePasswordReq;
+
 	private AuthService authService;
 	@BeforeEach
 	void setUp() {
 		registerReq = new RegisterReq(VALID_EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, PHONE_NUMBER);
 		loginReq = new LoginReq(VALID_EMAIL, PASSWORD);
+		changePasswordReq = new ChangePasswordReq(VALID_EMAIL, PASSWORD, NEW_PASSWORD);
 		passwordEncoder = new BCryptPasswordEncoder();
 		authService = new AuthService(accountService, passwordEncoder, authenticationManager, userDetailsService,
 				jwtService, jwtProperties, userService);
@@ -119,7 +125,7 @@ class AuthServiceTest {
 			when(userDetailsService.loadUserByUsername(VALID_EMAIL)).thenReturn(userPrincipal);
 			when(jwtService.generateToken(userPrincipal)).thenReturn("token");
 
-			AuthResponse response = authService.login(new LoginReq(VALID_EMAIL, PASSWORD));
+			AuthResponse response = authService.login(loginReq);
 
 			assertNotNull(response.accessToken());
 		}
@@ -129,7 +135,7 @@ class AuthServiceTest {
                     .thenThrow(new BadCredentialsException("Invalid credentials"));
 
             assertThrows(BadCredentialsException.class,
-                    () -> authService.login(new LoginReq(INVALID_EMAIL, PASSWORD)));
+                    () -> authService.login(loginReq));
         }
 
 		@Test
@@ -138,8 +144,38 @@ class AuthServiceTest {
                     .thenThrow(new BadCredentialsException("Invalid credentials"));
 
             assertThrows(BadCredentialsException.class,
-                    () -> authService.login(new LoginReq(VALID_EMAIL, INVALID_PASSWORD)));
+                    () -> authService.login(loginReq));
         }
+
+	}
+
+	@Nested
+	class ChangePassword {
+		@BeforeEach
+		void setUp() {
+			authService.register(registerReq);
+		}
+
+		@Test
+		void givenWhenValidRequest_thenFindAccountByEmail() {
+			Account account = new Account(UUID.randomUUID(), VALID_EMAIL, PASSWORD, Role.VETERINARIAN);
+			when(accountService.findByEmail(VALID_EMAIL)).thenReturn(account);
+
+			authService.changePassword(changePasswordReq);
+
+			verify(accountService).findByEmail(VALID_EMAIL);
+		}
+
+		@Test
+		void givenWhenValidRequest_thenUpdatePasswordForAccountId() {
+			UUID accountId = UUID.randomUUID();
+			Account account = new Account(accountId, VALID_EMAIL, PASSWORD, Role.VETERINARIAN);
+			when(accountService.findByEmail(VALID_EMAIL)).thenReturn(account);
+
+			authService.changePassword(changePasswordReq);
+
+			verify(accountService).updatePassword(eq(accountId), any(UpdatePasswordCmd.class));
+		}
 
 	}
 
