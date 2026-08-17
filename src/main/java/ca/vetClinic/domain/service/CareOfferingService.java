@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface CareOfferingService {
 
-	List<CareOffering> findAllCareOfferings();
-
-	List<CareOffering> findByService(CareService careService);
+	List<CareOffering> findCareOfferings(CareService service);
 
 }
