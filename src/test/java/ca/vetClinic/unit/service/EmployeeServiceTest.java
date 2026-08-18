@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class EmployeeServiceImplTest {
+class EmployeeServiceTest {
 	private final String FIRST_NAME = "jacob";
 	private final String LAST_NAME = "houle";
 	private final String PHONE_NUMBER = "1234567890";
