@@ -95,7 +95,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return password.toString();
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public String createEmployee(String firstName, String lastName, String phoneNumber, Role role) {
 		String password = createTemporaryPassword();

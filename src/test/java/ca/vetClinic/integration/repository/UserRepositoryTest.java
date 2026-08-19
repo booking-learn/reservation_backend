@@ -7,11 +7,9 @@ import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.repository.AccountRepository;
 import ca.vetClinic.domain.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@Rollback
 @Sql(scripts = "/sql/CleanUp.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-class UserRepositoryImplTest extends AbstractContainerBase {
+class UserRepositoryTest extends AbstractContainerBase {
 
 	private final String EMAIL = "jacob@gmail.com";
 	private final String OTHER_EMAIL = "other@email.com";

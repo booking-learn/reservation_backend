@@ -35,7 +35,7 @@ public class AuthService {
 	private final JwtProperties jwtProperties;
 	private final UserService userService;
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public AuthResponse register(RegisterReq request) {
 		if (accountService.existsByEmail(request.email())) {
 			throw new ConflictException("The account with this email already exists!");

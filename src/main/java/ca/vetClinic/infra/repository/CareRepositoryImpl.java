@@ -1,7 +1,6 @@
 package ca.vetClinic.infra.repository;
 
 import ca.vetClinic.domain.enumerator.CareService;
-import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.model.CareOffering;
 import ca.vetClinic.domain.repository.CareOfferingRepository;
 import ca.vetClinic.infra.mapper.CareOfferingMapper;
