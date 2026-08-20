@@ -17,6 +17,7 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 @Slf4j
@@ -79,9 +80,14 @@ public class ExceptionController {
 		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
 	}
 	@ExceptionHandler
-	public ResponseEntity<ErrorResponse> handleAuthorizationDenied(AuthorizationDeniedException ex) {
+	public ResponseEntity<ErrorResponse> handleException(AuthorizationDeniedException ex) {
 		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+	}
+	@ExceptionHandler
+	public ResponseEntity<ErrorResponse> handleException(MethodArgumentTypeMismatchException ex) {
+		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}
 	@ExceptionHandler
 	public ResponseEntity<ErrorResponse> handleException(Exception ex) {
