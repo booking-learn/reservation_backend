@@ -9,6 +9,13 @@ REST API for veterinary clinic management — JWT-secured, built with hexagonal 
 
 ---
 
+## About
+
+This project was built to deepen my understanding of Spring Boot by developing a complete,
+production-style backend API — covering hexagonal architecture, JWT-based security,
+integration/E2E testing, and a full CI/CD pipeline.
+
+
 ## Stack
 
 `Java 25` · `Spring Boot 4.0.2` · `Spring Security + JWT` · `JPA / Hibernate 7` · `TiDB Cloud (MySQL)` · `Flyway` · `Docker` · `GitHub Actions` 
