@@ -40,7 +40,7 @@ public class UserE2ETest extends BaseE2ETest {
 
 		@Test
 		void givenValidRequest_whenUpdate_thenNoContent() throws Exception {
-			mockMvc.perform(put("/user").header("Authorization", "Bearer " + accessToken)
+			mockMvc.perform(put("/users").header("Authorization", "Bearer " + accessToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "firstName": "Gontran",
@@ -52,7 +52,7 @@ public class UserE2ETest extends BaseE2ETest {
 
 		@Test
 		void givenNoToken_whenUpdate_thenUnauthorized() throws Exception {
-			mockMvc.perform(put("/user").contentType(MediaType.APPLICATION_JSON).content("""
+			mockMvc.perform(put("/users").contentType(MediaType.APPLICATION_JSON).content("""
 					{
 					  "firstName": "Gontran",
 					  "lastName": "Dupont",
@@ -63,7 +63,7 @@ public class UserE2ETest extends BaseE2ETest {
 
 		@Test
 		void givenInvalidFirstName_whenUpdate_thenBadRequestStatus() throws Exception {
-			mockMvc.perform(put("/user").header("Authorization", "Bearer " + accessToken)
+			mockMvc.perform(put("/users").header("Authorization", "Bearer " + accessToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "firstName": "",
@@ -75,7 +75,7 @@ public class UserE2ETest extends BaseE2ETest {
 
 		@Test
 		void givenInvalidPhoneNumber_whenUpdate_thenBadRequestStatus() throws Exception {
-			mockMvc.perform(put("/user").header("Authorization", "Bearer " + accessToken)
+			mockMvc.perform(put("/users").header("Authorization", "Bearer " + accessToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "firstName": "Gontran",
@@ -91,7 +91,7 @@ public class UserE2ETest extends BaseE2ETest {
 
 		@Test
 		void givenValidOldEmail_whenUpdateEmail_thenNoContent() throws Exception {
-			mockMvc.perform(patch("/user/email").header("Authorization", "Bearer " + accessToken)
+			mockMvc.perform(patch("/users/email").header("Authorization", "Bearer " + accessToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "oldEmail": "test@gmail.com",
@@ -102,7 +102,7 @@ public class UserE2ETest extends BaseE2ETest {
 
 		@Test
 		void givenWrongOldEmail_whenUpdateEmail_thenUnauthorized() throws Exception {
-			mockMvc.perform(patch("/user/email").header("Authorization", "Bearer " + accessToken)
+			mockMvc.perform(patch("/users/email").header("Authorization", "Bearer " + accessToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "oldEmail": "mauvais@gmail.com",
@@ -113,7 +113,7 @@ public class UserE2ETest extends BaseE2ETest {
 
 		@Test
 		void givenNoToken_whenUpdateEmail_thenUnauthorized() throws Exception {
-			mockMvc.perform(patch("/user/email").contentType(MediaType.APPLICATION_JSON).content("""
+			mockMvc.perform(patch("/users/email").contentType(MediaType.APPLICATION_JSON).content("""
 					{
 					  "oldEmail": "test@gmail.com",
 					  "newEmail": "nouveau@gmail.com"
@@ -123,7 +123,7 @@ public class UserE2ETest extends BaseE2ETest {
 
 		@Test
 		void givenInvalidNewEmail_whenUpdateEmail_thenBadRequestStatus() throws Exception {
-			mockMvc.perform(patch("/user/email").header("Authorization", "Bearer " + accessToken)
+			mockMvc.perform(patch("/users/email").header("Authorization", "Bearer " + accessToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "oldEmail": "test@gmail.com",
@@ -138,7 +138,7 @@ public class UserE2ETest extends BaseE2ETest {
 
 		@Test
 		void givenValidOldPassword_whenUpdatePassword_thenNoContent() throws Exception {
-			mockMvc.perform(patch("/user/password").header("Authorization", "Bearer " + accessToken)
+			mockMvc.perform(patch("/users/password").header("Authorization", "Bearer " + accessToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "oldPassword": "string",
@@ -149,7 +149,7 @@ public class UserE2ETest extends BaseE2ETest {
 
 		@Test
 		void givenWrongOldPassword_whenUpdatePassword_thenUnauthorized() throws Exception {
-			mockMvc.perform(patch("/user/password").header("Authorization", "Bearer " + accessToken)
+			mockMvc.perform(patch("/users/password").header("Authorization", "Bearer " + accessToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "oldPassword": "mauvaisMotDePasse",
@@ -160,7 +160,7 @@ public class UserE2ETest extends BaseE2ETest {
 
 		@Test
 		void givenNoToken_whenUpdatePassword_thenUnauthorized() throws Exception {
-			mockMvc.perform(patch("/user/password").contentType(MediaType.APPLICATION_JSON).content("""
+			mockMvc.perform(patch("/users/password").contentType(MediaType.APPLICATION_JSON).content("""
 					{
 					  "oldPassword": "string",
 					  "newPassword": "nouveauMotDePasse123"
@@ -170,7 +170,7 @@ public class UserE2ETest extends BaseE2ETest {
 
 		@Test
 		void givenInvalidNewPassword_whenUpdatePassword_thenBadRequestStatus() throws Exception {
-			mockMvc.perform(patch("/user/password").header("Authorization", "Bearer " + accessToken)
+			mockMvc.perform(patch("/users/password").header("Authorization", "Bearer " + accessToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "oldPassword": "string",
@@ -183,20 +183,21 @@ public class UserE2ETest extends BaseE2ETest {
 	class Get {
 		@Test
 		void givenWhenGetMe_thenOkAndReturnBody() throws Exception {
-			mockMvc.perform(get("/user/me").header("Authorization", "Bearer " + accessToken)).andExpect(status().isOk())
-					.andExpect(jsonPath("$.firstName").value("Test")).andExpect(jsonPath("$.lastName").value("User"))
+			mockMvc.perform(get("/users/me").header("Authorization", "Bearer " + accessToken))
+					.andExpect(status().isOk()).andExpect(jsonPath("$.firstName").value("Test"))
+					.andExpect(jsonPath("$.lastName").value("User"))
 					.andExpect(jsonPath("$.phoneNumber").value("83783692988"));
 
 		}
 		@Test
 		void givenNonAdminRole_whenGetAllUsers_thenForbiddenStatus() throws Exception {
-			mockMvc.perform(get("/user").header("Authorization", "Bearer " + accessToken))
+			mockMvc.perform(get("/users").header("Authorization", "Bearer " + accessToken))
 					.andExpect(status().isForbidden());
 		}
 		@Test
 		void givenNonAdminRole_whenGetUser_thenForbiddenStatus() throws Exception {
 			mockMvc.perform(
-					get("/user/{id}", java.util.UUID.randomUUID()).header("Authorization", "Bearer " + accessToken))
+					get("/users/{id}", java.util.UUID.randomUUID()).header("Authorization", "Bearer " + accessToken))
 					.andExpect(status().isForbidden());
 		}
 	}

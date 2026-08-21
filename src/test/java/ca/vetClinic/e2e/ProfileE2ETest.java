@@ -37,7 +37,7 @@ class ProfileE2ETest extends BaseE2ETest {
 
 	@Test
 	void givenValidToken_whenGetProfile_thenSuccess() throws Exception {
-		mockMvc.perform(get("/profile").header("Authorization", "Bearer " + accessToken)).andExpect(status().isOk())
+		mockMvc.perform(get("/profiles").header("Authorization", "Bearer " + accessToken)).andExpect(status().isOk())
 				.andExpect(jsonPath("$.email").value("test@gmail.com"));
 	}
 }

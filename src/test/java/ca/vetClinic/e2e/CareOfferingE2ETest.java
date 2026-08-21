@@ -13,34 +13,34 @@ class CareOfferingE2ETest extends BaseE2ETest {
 
 	@Test
 	void findAllCareOfferings_returnsOk() throws Exception {
-		mockMvc.perform(get("/care")).andExpect(status().isOk());
+		mockMvc.perform(get("/cares")).andExpect(status().isOk());
 	}
 
 	@Test
 	void findAllCareOfferings_returnsAllOfferings() throws Exception {
-		mockMvc.perform(get("/care")).andExpect(jsonPath("$.length()").value(6));
+		mockMvc.perform(get("/cares")).andExpect(jsonPath("$.length()").value(6));
 	}
 
 	@Test
 	void findCareOfferingsByService_returnsOnlyMatchingCount() throws Exception {
-		mockMvc.perform(get("/care").param("service", CareService.STERILIZATION.name()))
+		mockMvc.perform(get("/cares").param("service", CareService.STERILIZATION.name()))
 				.andExpect(jsonPath("$.length()").value(2));
 	}
 
 	@Test
 	void findCareOfferingsByService_returnsOnlySterilizationCareService() throws Exception {
-		mockMvc.perform(get("/care").param("service", CareService.STERILIZATION.name()))
+		mockMvc.perform(get("/cares").param("service", CareService.STERILIZATION.name()))
 				.andExpect(jsonPath("$[*].careService", everyItem(is(CareService.STERILIZATION.name()))));
 	}
 
 	@Test
 	void findCareOfferingsByService_returnsOnlyVaccinationCareService() throws Exception {
-		mockMvc.perform(get("/care").param("service", CareService.VACCINATION.name()))
+		mockMvc.perform(get("/cares").param("service", CareService.VACCINATION.name()))
 				.andExpect(jsonPath("$[*].careService", everyItem(is(CareService.VACCINATION.name()))));
 	}
 
 	@Test
 	void findCareOfferingsByService_unknownServiceReturnsBadRequest() throws Exception {
-		mockMvc.perform(get("/care").param("service", "INVALID")).andExpect(status().isBadRequest());
+		mockMvc.perform(get("/cares").param("service", "INVALID")).andExpect(status().isBadRequest());
 	}
 }

@@ -83,7 +83,7 @@ public class EmployeeTest extends BaseE2ETest {
 
 		@Test
 		void givenItAdmin_whenCreateEmployee_thenCreated() throws Exception {
-			mockMvc.perform(post("/employee").header("Authorization", "Bearer " + itAdminToken)
+			mockMvc.perform(post("/employees").header("Authorization", "Bearer " + itAdminToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "firstName": "Gontran",
@@ -95,7 +95,7 @@ public class EmployeeTest extends BaseE2ETest {
 		}
 		@Test
 		void givenItAdmin_whenCreateEmployee_thenReturnPassword() throws Exception {
-			mockMvc.perform(post("/employee").header("Authorization", "Bearer " + itAdminToken)
+			mockMvc.perform(post("/employees").header("Authorization", "Bearer " + itAdminToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "firstName": "Gontran",
@@ -109,7 +109,7 @@ public class EmployeeTest extends BaseE2ETest {
 
 		@Test
 		void givenNonAdmin_whenCreateEmployee_thenForbidden() throws Exception {
-			mockMvc.perform(post("/employee").header("Authorization", "Bearer " + nonAdminToken)
+			mockMvc.perform(post("/employees").header("Authorization", "Bearer " + nonAdminToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "firstName": "Gontran",
@@ -122,7 +122,7 @@ public class EmployeeTest extends BaseE2ETest {
 
 		@Test
 		void givenNoToken_whenCreateEmployee_thenUnauthorized() throws Exception {
-			mockMvc.perform(post("/employee").contentType(MediaType.APPLICATION_JSON).content("""
+			mockMvc.perform(post("/employees").contentType(MediaType.APPLICATION_JSON).content("""
 					{
 					  "firstName": "Gontran",
 					  "lastName": "Dupont",
@@ -134,7 +134,7 @@ public class EmployeeTest extends BaseE2ETest {
 
 		@Test
 		void givenInvalidFirstName_whenCreateEmployee_thenBadRequest() throws Exception {
-			mockMvc.perform(post("/employee").header("Authorization", "Bearer " + itAdminToken)
+			mockMvc.perform(post("/employees").header("Authorization", "Bearer " + itAdminToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "firstName": "",
@@ -151,7 +151,7 @@ public class EmployeeTest extends BaseE2ETest {
 
 		@Test
 		void givenEmployeeToken_whenGetMe_thenOkAndReturnBody() throws Exception {
-			mockMvc.perform(get("/employee/me").header("Authorization", "Bearer " + employeeToken))
+			mockMvc.perform(get("/employees/me").header("Authorization", "Bearer " + employeeToken))
 					.andExpect(status().isOk()).andExpect(jsonPath("$.firstName").value("Jean"))
 					.andExpect(jsonPath("$.lastName").value("Testeur"))
 					.andExpect(jsonPath("$.phoneNumber").value("5145550000"));
@@ -159,7 +159,7 @@ public class EmployeeTest extends BaseE2ETest {
 
 		@Test
 		void givenNoToken_whenGetMe_thenUnauthorized() throws Exception {
-			mockMvc.perform(get("/employee/me")).andExpect(status().isUnauthorized());
+			mockMvc.perform(get("/employees/me")).andExpect(status().isUnauthorized());
 		}
 	}
 
@@ -168,20 +168,21 @@ public class EmployeeTest extends BaseE2ETest {
 
 		@Test
 		void givenItAdmin_whenGetEmployeeById_thenOk() throws Exception {
-			mockMvc.perform(get("/employee/{id}", SEEDED_EMPLOYEE_ID).header("Authorization", "Bearer " + itAdminToken))
+			mockMvc.perform(
+					get("/employees/{id}", SEEDED_EMPLOYEE_ID).header("Authorization", "Bearer " + itAdminToken))
 					.andExpect(status().isOk()).andExpect(jsonPath("$.firstName").value("Jean"));
 		}
 
 		@Test
 		void givenNonAdmin_whenGetEmployeeById_thenForbidden() throws Exception {
 			mockMvc.perform(
-					get("/employee/{id}", SEEDED_EMPLOYEE_ID).header("Authorization", "Bearer " + nonAdminToken))
+					get("/employees/{id}", SEEDED_EMPLOYEE_ID).header("Authorization", "Bearer " + nonAdminToken))
 					.andExpect(status().isForbidden());
 		}
 
 		@Test
 		void givenNoToken_whenGetEmployeeById_thenUnauthorized() throws Exception {
-			mockMvc.perform(get("/employee/{id}", SEEDED_EMPLOYEE_ID)).andExpect(status().isUnauthorized());
+			mockMvc.perform(get("/employees/{id}", SEEDED_EMPLOYEE_ID)).andExpect(status().isUnauthorized());
 		}
 	}
 
@@ -190,13 +191,13 @@ public class EmployeeTest extends BaseE2ETest {
 
 		@Test
 		void givenItAdmin_whenGetAllEmployees_thenOk() throws Exception {
-			mockMvc.perform(get("/employee").header("Authorization", "Bearer " + itAdminToken))
+			mockMvc.perform(get("/employees").header("Authorization", "Bearer " + itAdminToken))
 					.andExpect(status().isOk());
 		}
 
 		@Test
 		void givenNonAdmin_whenGetAllEmployees_thenForbidden() throws Exception {
-			mockMvc.perform(get("/employee").header("Authorization", "Bearer " + nonAdminToken))
+			mockMvc.perform(get("/employees").header("Authorization", "Bearer " + nonAdminToken))
 					.andExpect(status().isForbidden());
 		}
 	}
@@ -206,7 +207,7 @@ public class EmployeeTest extends BaseE2ETest {
 
 		@Test
 		void givenEmployeeToken_whenUpdateEmployee_thenNoContent() throws Exception {
-			mockMvc.perform(put("/employee").header("Authorization", "Bearer " + employeeToken)
+			mockMvc.perform(put("/employees").header("Authorization", "Bearer " + employeeToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "firstName": "Jean",
@@ -218,7 +219,7 @@ public class EmployeeTest extends BaseE2ETest {
 
 		@Test
 		void givenNoToken_whenUpdateEmployee_thenUnauthorized() throws Exception {
-			mockMvc.perform(put("/employee").contentType(MediaType.APPLICATION_JSON).content("""
+			mockMvc.perform(put("/employees").contentType(MediaType.APPLICATION_JSON).content("""
 					{
 					  "firstName": "Jean",
 					  "lastName": "Modifie",
@@ -233,7 +234,7 @@ public class EmployeeTest extends BaseE2ETest {
 
 		@Test
 		void givenValidOldPassword_whenUpdatePassword_thenNoContent() throws Exception {
-			mockMvc.perform(patch("/employee/password").header("Authorization", "Bearer " + employeeToken)
+			mockMvc.perform(patch("/employees/password").header("Authorization", "Bearer " + employeeToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "oldPassword": "%s",
@@ -244,7 +245,7 @@ public class EmployeeTest extends BaseE2ETest {
 
 		@Test
 		void givenWrongOldPassword_whenUpdatePassword_thenUnauthorized() throws Exception {
-			mockMvc.perform(patch("/employee/password").header("Authorization", "Bearer " + employeeToken)
+			mockMvc.perform(patch("/employees/password").header("Authorization", "Bearer " + employeeToken)
 					.contentType(MediaType.APPLICATION_JSON).content("""
 							{
 							  "oldPassword": "mauvaisMotDePasse",
@@ -255,7 +256,7 @@ public class EmployeeTest extends BaseE2ETest {
 
 		@Test
 		void givenNoToken_whenUpdatePassword_thenUnauthorized() throws Exception {
-			mockMvc.perform(patch("/employee/password").contentType(MediaType.APPLICATION_JSON).content("""
+			mockMvc.perform(patch("/employees/password").contentType(MediaType.APPLICATION_JSON).content("""
 					{
 					  "oldPassword": "%s",
 					  "newPassword": "NouveauMotDePasse456!"
@@ -270,20 +271,20 @@ public class EmployeeTest extends BaseE2ETest {
 		@Test
 		void givenItAdmin_whenDeleteEmployee_thenNoContent() throws Exception {
 			mockMvc.perform(
-					delete("/employee/{id}", SEEDED_EMPLOYEE_ID).header("Authorization", "Bearer " + itAdminToken))
+					delete("/employees/{id}", SEEDED_EMPLOYEE_ID).header("Authorization", "Bearer " + itAdminToken))
 					.andExpect(status().isNoContent());
 		}
 
 		@Test
 		void givenNonAdmin_whenDeleteEmployee_thenForbidden() throws Exception {
 			mockMvc.perform(
-					delete("/employee/{id}", SEEDED_EMPLOYEE_ID).header("Authorization", "Bearer " + nonAdminToken))
+					delete("/employees/{id}", SEEDED_EMPLOYEE_ID).header("Authorization", "Bearer " + nonAdminToken))
 					.andExpect(status().isForbidden());
 		}
 
 		@Test
 		void givenNoToken_whenDeleteEmployee_thenUnauthorized() throws Exception {
-			mockMvc.perform(delete("/employee/{id}", SEEDED_EMPLOYEE_ID)).andExpect(status().isUnauthorized());
+			mockMvc.perform(delete("/employees/{id}", SEEDED_EMPLOYEE_ID)).andExpect(status().isUnauthorized());
 		}
 	}
 }

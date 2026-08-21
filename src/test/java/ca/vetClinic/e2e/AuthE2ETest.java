@@ -189,7 +189,7 @@ public class AuthE2ETest extends BaseE2ETest {
 
 			employeeCreatedEmail = "jo.mabiala@vetClinic.ca";
 			String body = mockMvc
-					.perform(post("/employee").header("Authorization", "Bearer " + itAdminToken)
+					.perform(post("/employees").header("Authorization", "Bearer " + itAdminToken)
 							.contentType(MediaType.APPLICATION_JSON).content("""
 									                   {
 									                     "firstName": "jo",
