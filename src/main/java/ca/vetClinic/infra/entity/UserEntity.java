@@ -32,7 +32,7 @@ public class UserEntity {
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private Instant userCreatedAt;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "account_id", nullable = false, columnDefinition = "BINARY(16)")
 	private AccountEntity account;
 

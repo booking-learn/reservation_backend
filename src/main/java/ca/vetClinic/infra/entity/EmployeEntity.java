@@ -25,7 +25,7 @@ public class EmployeEntity {
 	@Column(name = "phone_number", nullable = false, length = 15)
 	private String phoneNumber;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "account_id", nullable = false, columnDefinition = "BINARY(16)")
 	private AccountEntity account;
 
