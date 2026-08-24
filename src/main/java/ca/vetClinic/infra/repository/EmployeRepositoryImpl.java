@@ -31,13 +31,12 @@ public class EmployeRepositoryImpl implements EmployeRepository {
 
 	@Override
 	public Employee findByRole(Role role) {
-		return jpaRepository.findByAccount_Role(role).map(mapper::toDomain)
+		return jpaRepository.findByAccountRole(role).map(mapper::toDomain)
 				.orElseThrow(() -> new NotFoundException("role"));
 	}
 
 	@Override
 	public void save(Employee employee) {
-		// if(employee.getAccountId() == null) {}
 		if (employee.getId() != null) {
 			EmployeEntity savedEntity = jpaRepository.findById(employee.getId())
 					.orElseThrow(() -> new NotFoundException("id"));

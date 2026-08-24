@@ -18,9 +18,9 @@ public class PetEntity {
 	@Column(name = "id", columnDefinition = "BINARY(16)", updatable = false, nullable = false)
 	private UUID id;
 
-	@Column(name = "owner_id", nullable = false)
-	private UUID ownerId;
-
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "owner_id", nullable = false, columnDefinition = "BINARY(16)")
+	private UserEntity user;
 	@Column(name = "name", nullable = false, length = 100)
 	private String name;
 
@@ -39,8 +39,7 @@ public class PetEntity {
 	public PetEntity() {
 	}
 
-	public PetEntity(UUID ownerId, String name, String species, String breed, String gender, LocalDate birthDate) {
-		this.ownerId = ownerId;
+	public PetEntity(String name, String species, String breed, String gender, LocalDate birthDate) {
 		this.name = name;
 		this.species = species;
 		this.breed = breed;

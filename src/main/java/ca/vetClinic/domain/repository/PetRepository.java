@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PetRepository {
-	Pet save(Pet pet);
+	void save(Pet pet);
 
-	List<Pet> findByAll();
+	List<Pet> findAll();
 
-	List<Pet> findByOwnerId(UUID ownerId);
+	Pet findByUserId(UUID userId);
+
+	List<Pet> findAllByUserId(UUID userId);
 
 	void deleteById(UUID id);
 }

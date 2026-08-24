@@ -1,11 +1,9 @@
 package ca.vetClinic.application.service;
 
 import ca.vetClinic.application.command.UpdateEmployeeCmd;
-import ca.vetClinic.application.command.UpdatePasswordCmd;
 import ca.vetClinic.domain.enumerator.Role;
 import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.model.Employee;
-import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.repository.EmployeRepository;
 import ca.vetClinic.domain.service.AccountService;
 import ca.vetClinic.domain.service.EmployeeService;

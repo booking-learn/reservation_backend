@@ -5,6 +5,7 @@ import ca.vetClinic.application.service.UserServiceImpl;
 import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.repository.UserRepository;
 import ca.vetClinic.domain.service.AccountService;
+import ca.vetClinic.domain.service.PetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,8 @@ class UserServiceTest {
 	private UserRepository userRepository;
 	@Mock
 	private AccountService accountService;
+	@Mock
+	private PetService petService;
 	@Captor
 	private ArgumentCaptor<User> captor;
 	@Spy
@@ -42,7 +45,7 @@ class UserServiceTest {
 	private final UUID uuid = UUID.randomUUID();
 	@BeforeEach
 	void setUp() {
-		userService = new UserServiceImpl(userRepository, accountService);
+		userService = new UserServiceImpl(userRepository, accountService, petService);
 		cmd = new UpdateUserCmd(NEW_FIRST_NAME, NEW_LAST_NAME, NEW_PHONE_NUMBER);
 	}
 	@Nested
