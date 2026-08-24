@@ -10,6 +10,6 @@ public interface UserMapper {
 
 	@Mapping(target = "accountId", source = "account.id")
 	User toDomain(UserEntity entity);
-	@Mapping(target = "account", ignore = true)
+	@Mapping(target = "account.id", source = "accountId")
 	UserEntity toEntity(User user);
 }

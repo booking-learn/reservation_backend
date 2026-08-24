@@ -37,6 +37,7 @@ public class EmployeRepositoryImpl implements EmployeRepository {
 
 	@Override
 	public void save(Employee employee) {
+		// if(employee.getAccountId() == null) {}
 		if (employee.getId() != null) {
 			EmployeEntity savedEntity = jpaRepository.findById(employee.getId())
 					.orElseThrow(() -> new NotFoundException("id"));

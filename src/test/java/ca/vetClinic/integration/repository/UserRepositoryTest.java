@@ -84,13 +84,6 @@ class UserRepositoryTest extends AbstractContainerBase {
 	}
 
 	@Test
-	void givenAccountDoesNotExist_thenThrowNotFoundExceptionOnSave() {
-		User user = createUser(UUID.randomUUID());
-
-		assertThrows(NotFoundException.class, () -> repository.save(user));
-	}
-
-	@Test
 	void givenExistingUser_whenSaveCalledWithId_thenUpdate() {
 		Account account = createAndSaveAccount(EMAIL);
 		User user = createUser(account.getId());

@@ -20,7 +20,6 @@ public class UserRepositoryImpl implements UserRepository {
 
 	private final UserJpaRepository jpaRepository;
 	private final UserMapper mapper;
-	private final AccountJpaRepository accountJpaRepository;
 
 	@Override
 	public List<User> findAll() {
@@ -44,10 +43,7 @@ public class UserRepositoryImpl implements UserRepository {
 			jpaRepository.save(existingUser);
 			return;
 		}
-		AccountEntity accountEntity = accountJpaRepository.findById(user.getAccountId())
-				.orElseThrow(() -> new NotFoundException("Account not found with id: " + user.getAccountId()));
 		UserEntity entity = mapper.toEntity(user);
-		entity.setAccount(accountEntity);
 		jpaRepository.save(entity);
 		user.setId(entity.getId());
 	}
