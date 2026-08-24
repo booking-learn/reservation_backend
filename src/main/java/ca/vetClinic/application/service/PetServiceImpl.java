@@ -7,6 +7,7 @@ import ca.vetClinic.domain.service.PetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,6 +39,16 @@ public class PetServiceImpl implements PetService {
 	}
 
 	@Override
+	public Pet findByOwnerId(UUID ownerId) {
+		return petRepository.findByUserId(ownerId);
+	}
+
+	@Override
+	public Pet createPet(UUID ownerId, String name, String species, String breed, String gender, LocalDate birthDate) {
+		return new Pet(null, ownerId, name, species, breed, gender, birthDate);
+	}
+
+	@Override
 	public Pet findByPetId(UUID petId) {
 		validateUUID(petId);
 		return petRepository.findByUserId(petId);
@@ -58,7 +69,7 @@ public class PetServiceImpl implements PetService {
 
 	@Override
 	public void deleteByOwnerId(UUID ownerId) {
-		Pet pet = findByPetId(ownerId);
+		Pet pet = findByOwnerId(ownerId);
 		petRepository.deleteById(pet.getId());
 	}
 }
