@@ -8,6 +8,8 @@ import java.util.UUID;
 public interface PetRepository {
 	void save(Pet pet);
 
+	Pet findById(UUID id);
+
 	List<Pet> findAll();
 
 	Pet findByUserId(UUID userId);

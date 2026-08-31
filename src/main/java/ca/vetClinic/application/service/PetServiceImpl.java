@@ -1,9 +1,13 @@
 package ca.vetClinic.application.service;
 
 import ca.vetClinic.application.command.UpdatePetCmd;
+import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.model.Pet;
+import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.repository.PetRepository;
+import ca.vetClinic.domain.service.AccountService;
 import ca.vetClinic.domain.service.PetService;
+import ca.vetClinic.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +19,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PetServiceImpl implements PetService {
 	private final PetRepository petRepository;
+	private final UserService userService;
+	private final AccountService accountService;
 
 	private void validateUUID(UUID uuid) {
 		if (uuid == null) {
@@ -39,6 +45,20 @@ public class PetServiceImpl implements PetService {
 	}
 
 	@Override
+	public List<Pet> findAllByOwnerEmail(String email) {
+		Account account = accountService.findByEmail(email);
+		User specificUser = userService.findByAccountId(account.getId());
+		return petRepository.findAllByUserId(specificUser.getId());
+	}
+
+	@Override
+	public Pet findByOwnerEmail(String email) {
+		Account account = accountService.findByEmail(email);
+		User specificUser = userService.findByAccountId(account.getId());
+		return petRepository.findByUserId(specificUser.getId());
+	}
+
+	@Override
 	public Pet findByOwnerId(UUID ownerId) {
 		return petRepository.findByUserId(ownerId);
 	}
@@ -51,7 +71,13 @@ public class PetServiceImpl implements PetService {
 	@Override
 	public Pet findByPetId(UUID petId) {
 		validateUUID(petId);
-		return petRepository.findByUserId(petId);
+		return petRepository.findById(petId);
+	}
+
+	@Override
+	public UUID findOwnerId(String email) {
+		Account account = accountService.findByEmail(email);
+		return userService.findByAccountId(account.getId()).getId();
 	}
 
 	@Override
@@ -72,4 +98,16 @@ public class PetServiceImpl implements PetService {
 		Pet pet = findByOwnerId(ownerId);
 		petRepository.deleteById(pet.getId());
 	}
+
+	@Override
+	public void deleteByOwnerEmail(String email) {
+		Account account = accountService.findByEmail(email);
+		User user = userService.findByAccountId(account.getId());
+		List<Pet> pets = petRepository.findAllByUserId(user.getId());
+		for (Pet p : pets) {
+			petRepository.deleteById(p.getId());
+		}
+
+	}
+
 }

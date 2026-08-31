@@ -14,15 +14,23 @@ public interface PetService {
 
 	List<Pet> findAllByOwnerId(UUID ownerId);
 
+	List<Pet> findAllByOwnerEmail(String email);
+
+	Pet findByOwnerEmail(String email);
+
 	Pet findByOwnerId(UUID ownerId);
 
 	Pet createPet(UUID ownerId, String name, String species, String breed, String gender, LocalDate birthDate);
 
 	Pet findByPetId(UUID petId);
 
+	UUID findOwnerId(String email);
+
 	void update(UUID petId, UpdatePetCmd cmd);
 
 	void deleteById(UUID id);
 
 	void deleteByOwnerId(UUID ownerId);
+
+	void deleteByOwnerEmail(String email);
 }

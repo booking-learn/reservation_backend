@@ -20,7 +20,7 @@ public class PetRepositoryImpl implements PetRepository {
 	@Override
 	public void save(Pet pet) {
 		if (pet.getId() != null) {
-			PetEntity entity = jpaRepository.findByUserId(pet.getId()).orElseThrow(() -> new NotFoundException("id"));
+			PetEntity entity = jpaRepository.findById(pet.getId()).orElseThrow(() -> new NotFoundException("id"));
 			entity.setId(pet.getId());
 			entity.setName(pet.getName());
 			entity.setBirthDate(pet.getBirthDate());
@@ -31,6 +31,11 @@ public class PetRepositoryImpl implements PetRepository {
 		PetEntity newPet = mapper.toEntity(pet);
 		jpaRepository.save(newPet);
 		pet.setId(newPet.getId());
+	}
+
+	@Override
+	public Pet findById(UUID id) {
+		return jpaRepository.findById(id).map(mapper::toDomain).orElseThrow(() -> new NotFoundException("id"));
 	}
 
 	@Override
@@ -46,7 +51,7 @@ public class PetRepositoryImpl implements PetRepository {
 
 	@Override
 	public List<Pet> findAllByUserId(UUID userId) {
-		return jpaRepository.findByUserId(userId).stream().map(mapper::toDomain).toList();
+		return jpaRepository.findAllByUserId(userId).stream().map(mapper::toDomain).toList();
 	}
 
 	@Override
