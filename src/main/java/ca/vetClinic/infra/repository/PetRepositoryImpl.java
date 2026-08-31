@@ -58,4 +58,9 @@ public class PetRepositoryImpl implements PetRepository {
 	public void deleteById(UUID id) {
 		jpaRepository.deleteById(id);
 	}
+
+	@Override
+	public void deleteAllByUserId(UUID userId) {
+		jpaRepository.deleteAllByUserId(userId);
+	}
 }

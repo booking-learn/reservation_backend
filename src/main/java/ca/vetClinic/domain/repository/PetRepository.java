@@ -17,4 +17,6 @@ public interface PetRepository {
 	List<Pet> findAllByUserId(UUID userId);
 
 	void deleteById(UUID id);
+
+	void deleteAllByUserId(UUID userId);
 }

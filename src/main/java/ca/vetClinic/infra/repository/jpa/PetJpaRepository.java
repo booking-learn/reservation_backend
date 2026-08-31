@@ -11,4 +11,6 @@ public interface PetJpaRepository extends JpaRepository<PetEntity, UUID> {
 	Optional<PetEntity> findByUserId(UUID id);
 
 	List<PetEntity> findAllByUserId(UUID userId);
+
+	void deleteAllByUserId(UUID userId);
 }

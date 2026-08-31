@@ -3,6 +3,7 @@ package ca.vetClinic.unit.service;
 import ca.vetClinic.application.command.UpdateUserCmd;
 import ca.vetClinic.application.service.UserServiceImpl;
 import ca.vetClinic.domain.model.User;
+import ca.vetClinic.domain.repository.PetRepository;
 import ca.vetClinic.domain.repository.UserRepository;
 import ca.vetClinic.domain.service.AccountService;
 import ca.vetClinic.domain.service.PetService;
@@ -36,7 +37,7 @@ class UserServiceTest {
 	@Mock
 	private AccountService accountService;
 	@Mock
-	private PetService petService;
+	private PetRepository petRepository;
 	@Captor
 	private ArgumentCaptor<User> captor;
 	@Spy
@@ -45,7 +46,7 @@ class UserServiceTest {
 	private final UUID uuid = UUID.randomUUID();
 	@BeforeEach
 	void setUp() {
-		userService = new UserServiceImpl(userRepository, accountService, petService);
+		userService = new UserServiceImpl(userRepository, accountService, petRepository);
 		cmd = new UpdateUserCmd(NEW_FIRST_NAME, NEW_LAST_NAME, NEW_PHONE_NUMBER);
 	}
 	@Nested
