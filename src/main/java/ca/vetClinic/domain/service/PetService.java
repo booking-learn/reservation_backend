@@ -12,13 +12,7 @@ public interface PetService {
 
 	List<Pet> findAll();
 
-	List<Pet> findAllByOwnerId(UUID ownerId);
-
 	List<Pet> findAllByOwnerEmail(String email);
-
-	Pet findByOwnerEmail(String email);
-
-	Pet findByOwnerId(UUID ownerId);
 
 	Pet createPet(UUID ownerId, String name, String species, String breed, String gender, LocalDate birthDate);
 
@@ -28,9 +22,9 @@ public interface PetService {
 
 	void update(UUID petId, UpdatePetCmd cmd);
 
-	void deleteById(UUID id);
+	void updateByOwner(String ownerEmail, UUID petId, UpdatePetCmd cmd);
 
-	void deleteByOwnerId(UUID ownerId);
+	void deleteById(UUID id);
 
 	void deleteByOwnerEmail(String email);
 }

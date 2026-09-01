@@ -71,8 +71,9 @@ public class Pet {
 	}
 
 	@PatchMapping("/{petId}/owner")
-	public ResponseEntity<Void> updatePetAsOwner(@PathVariable UUID petId, @RequestBody UpdatePetCmd cmd) {
-		petService.update(petId, cmd);
+	public ResponseEntity<Void> updatePetAsOwner(@AuthenticationPrincipal UserDetails user, @PathVariable UUID petId,
+			@RequestBody UpdatePetCmd cmd) {
+		petService.updateByOwner(user.getUsername(), petId, cmd);
 		return ResponseEntity.ok().build();
 	}
 	@PreAuthorize("hasAnyRole('IT_ADMIN')")

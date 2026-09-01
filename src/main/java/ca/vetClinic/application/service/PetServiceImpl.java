@@ -1,6 +1,7 @@
 package ca.vetClinic.application.service;
 
 import ca.vetClinic.application.command.UpdatePetCmd;
+import ca.vetClinic.domain.exception.UnAuthorizedException;
 import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.model.Pet;
 import ca.vetClinic.domain.model.User;
@@ -27,7 +28,11 @@ public class PetServiceImpl implements PetService {
 			throw new IllegalArgumentException("UUID is null");
 		}
 	}
-
+	private void validateEmail(String email) {
+		if (email == null) {
+			throw new IllegalArgumentException("Email is null");
+		}
+	}
 	@Override
 	public void save(Pet pet) {
 		petRepository.save(pet);
@@ -39,28 +44,10 @@ public class PetServiceImpl implements PetService {
 	}
 
 	@Override
-	public List<Pet> findAllByOwnerId(UUID ownerId) {
-		validateUUID(ownerId);
-		return petRepository.findAllByUserId(ownerId);
-	}
-
-	@Override
 	public List<Pet> findAllByOwnerEmail(String email) {
 		Account account = accountService.findByEmail(email);
 		User specificUser = userService.findByAccountId(account.getId());
 		return petRepository.findAllByUserId(specificUser.getId());
-	}
-
-	@Override
-	public Pet findByOwnerEmail(String email) {
-		Account account = accountService.findByEmail(email);
-		User specificUser = userService.findByAccountId(account.getId());
-		return petRepository.findByUserId(specificUser.getId());
-	}
-
-	@Override
-	public Pet findByOwnerId(UUID ownerId) {
-		return petRepository.findByUserId(ownerId);
 	}
 
 	@Override
@@ -87,6 +74,20 @@ public class PetServiceImpl implements PetService {
 		pet.setName(cmd.name());
 		petRepository.save(pet);
 	}
+
+	@Override
+	public void updateByOwner(String ownerEmail, UUID petId, UpdatePetCmd cmd) {
+		validateUUID(petId);
+		validateEmail(ownerEmail);
+		UUID ownerId = findOwnerId(ownerEmail);
+		Pet pet = findByPetId(petId);
+		if (!ownerId.equals(pet.getOwnerId())) {
+			throw new UnAuthorizedException();
+		}
+		pet.setName(cmd.name());
+		petRepository.save(pet);
+	}
+
 	@Override
 	public void deleteById(UUID id) {
 		validateUUID(id);
@@ -94,20 +95,11 @@ public class PetServiceImpl implements PetService {
 	}
 
 	@Override
-	public void deleteByOwnerId(UUID ownerId) {
-		Pet pet = findByOwnerId(ownerId);
-		petRepository.deleteById(pet.getId());
-	}
-
-	@Override
 	public void deleteByOwnerEmail(String email) {
+		validateEmail(email);
 		Account account = accountService.findByEmail(email);
 		User user = userService.findByAccountId(account.getId());
-		List<Pet> pets = petRepository.findAllByUserId(user.getId());
-		for (Pet p : pets) {
-			petRepository.deleteById(p.getId());
-		}
-
+		petRepository.deleteAllByUserId(user.getId());
 	}
 
 }
