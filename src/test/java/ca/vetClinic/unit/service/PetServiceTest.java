@@ -1,5 +1,6 @@
 package ca.vetClinic.unit.service;
 
+import ca.vetClinic.application.command.UpdatePetCmd;
 import ca.vetClinic.application.service.PetServiceImpl;
 import ca.vetClinic.domain.model.Account;
 import ca.vetClinic.domain.model.Pet;
@@ -18,7 +19,6 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -46,12 +46,14 @@ class PetServiceTest {
 	private AccountService accountService;
 	@Captor
 	ArgumentCaptor<Pet> petCaptor;
-	@Mock
-	private Pet pet;
+	@Spy
+	private Pet pet = new Pet(PET_ID, OWNER_ID, NAME, SPECIES, null, GENDER, BIRTHDATE);
 	@Mock
 	private User user;
 	@Mock
 	private Account account;
+	@Mock
+	private UpdatePetCmd updatePetCmd;
 
 	private PetService petService;
 
@@ -93,41 +95,67 @@ class PetServiceTest {
 		@Test
         void givenFindAllByOwnerEmail_thenReturnListWithPet() {
             when(accountService.findByEmail(OWNER_EMAIL)).thenReturn(account);
-            doReturn(UUID.randomUUID()).when(account).getId();
+            when(account.getId()).thenReturn(UUID.randomUUID());
             when(userService.findByAccountId(any(UUID.class))).thenReturn(user);
-            doReturn(OWNER_ID).when(user).getId();
+            when(user.getId()).thenReturn(OWNER_ID);
             List<Pet> pets=List.of(pet);
             when(petRepository.findAllByUserId(OWNER_ID)).thenReturn(pets);
             List<Pet> result= petService.findAllByOwnerEmail(OWNER_EMAIL);
             assertEquals(result,pets);
         }
 		@Test
-		void findByPetId() {
+		void givenFindByPetId_thenReturnPet() {
+            when(petRepository.findById(PET_ID)).thenReturn(pet);
+            Pet copy = petService.findByPetId(PET_ID);
+            assertEquals(copy, pet);
 		}
 
 		@Test
-		void findOwnerId() {
+		void givenFindOwnerId_thenReturnOwnerId() {
+            when(accountService.findByEmail(OWNER_EMAIL)).thenReturn(account);
+            doReturn(UUID.randomUUID()).when(account).getId();
+            when(userService.findByAccountId(any(UUID.class))).thenReturn(user);
+            doReturn(OWNER_ID).when(user).getId();
+            assertEquals(OWNER_ID,petService.findOwnerId(OWNER_EMAIL));
 		}
 
 	}
 	@Nested
 	class Update {
 		@Test
-		void update() {
+		void givenUpdate_thenUpdatePet() {
+            when(petRepository.findById(PET_ID)).thenReturn(pet);
+            petService.update(PET_ID, updatePetCmd);
+            verify(petRepository).save(petCaptor.capture());
 		}
 
 		@Test
-		void updateByOwner() {
+		void givenUpdateByOwner_thenUpdatePet() {
+            when(accountService.findByEmail(OWNER_EMAIL)).thenReturn(account);
+            when(account.getId()).thenReturn(UUID.randomUUID());
+            when(userService.findByAccountId(any(UUID.class))).thenReturn(user);
+            when(user.getId()).thenReturn(OWNER_ID);
+            when(petRepository.findById(PET_ID)).thenReturn(pet);
+            petService.updateByOwner(OWNER_EMAIL,PET_ID,updatePetCmd);
+            verify(petRepository).save(petCaptor.capture());
 		}
 	}
 	@Nested
 	class Delete {
 		@Test
-		void deleteById() {
+		void givenDeleteById_thenDeletePet() {
+			petService.deleteById(PET_ID);
+			verify(petRepository).deleteById(PET_ID);
 		}
 
 		@Test
-		void deleteByOwnerEmail() {
+		void givenDeleteByOwnerEmail_thenDeletePet() {
+            when(accountService.findByEmail(OWNER_EMAIL)).thenReturn(account);
+            when(account.getId()).thenReturn(UUID.randomUUID());
+            when(userService.findByAccountId(any(UUID.class))).thenReturn(user);
+            when(user.getId()).thenReturn(OWNER_ID);
+            petService.deleteByOwnerEmail(OWNER_EMAIL);
+            verify(petRepository).deleteAllByUserId(OWNER_ID);
 		}
 	}
 
