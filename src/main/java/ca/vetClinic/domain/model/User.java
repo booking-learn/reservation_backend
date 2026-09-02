@@ -68,8 +68,7 @@ public class User {
 			return true;
 		if (obj == null || getClass() != obj.getClass())
 			return false;
-		User user = (User) obj;
-		return user.getId().equals(((User) obj).getId());
+		return this.getId().equals(((User) obj).getId());
 	}
 	@Override
 	public int hashCode() {

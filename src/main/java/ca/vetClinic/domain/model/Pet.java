@@ -86,10 +86,10 @@ public class Pet {
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
-		return id != null && id.equals(((Pet) o).id);
+		return this.getId().equals(((Pet) o).getId());
 	}
 	@Override
 	public int hashCode() {
-		return id != null ? id.hashCode() : 0;
+		return this.id != null ? this.id.hashCode() : 0;
 	}
 }
