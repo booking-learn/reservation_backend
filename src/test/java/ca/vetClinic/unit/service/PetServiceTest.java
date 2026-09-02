@@ -47,7 +47,7 @@ class PetServiceTest {
 	@Captor
 	ArgumentCaptor<Pet> petCaptor;
 	@Spy
-	private Pet pet = new Pet(PET_ID, OWNER_ID, NAME, SPECIES, null, GENDER, BIRTHDATE);
+	private Pet pet = new Pet(null, OWNER_ID, NAME, SPECIES, null, GENDER, BIRTHDATE);
 	@Mock
 	private User user;
 	@Mock
@@ -68,6 +68,10 @@ class PetServiceTest {
 		void givenSavePet_thenSavePet() {
 			petService.save(pet);
 			verify(petRepository).save(petCaptor.capture());
+		}
+		@Test
+		void givenNullPet_thenThrowException() {
+			assertThrows(IllegalArgumentException.class, () -> petService.save(null));
 		}
 		@Test
 		void givenCreatePet_thenCreatePet() {

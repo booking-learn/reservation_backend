@@ -35,6 +35,9 @@ public class PetServiceImpl implements PetService {
 	}
 	@Override
 	public void save(Pet pet) {
+		if (pet == null) {
+			throw new IllegalArgumentException("Pet is null");
+		}
 		petRepository.save(pet);
 	}
 

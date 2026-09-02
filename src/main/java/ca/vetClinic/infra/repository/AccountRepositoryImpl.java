@@ -21,9 +21,6 @@ public class AccountRepositoryImpl implements AccountRepository {
 	private final AccountJpaRepository jpaRepository;
 	private final AccountMapper mapper;
 
-	@PersistenceContext
-	private EntityManager entityManager;
-
 	@Override
 	public List<Account> findAll() {
 		return jpaRepository.findAll().stream().map(mapper::toAccount).toList();

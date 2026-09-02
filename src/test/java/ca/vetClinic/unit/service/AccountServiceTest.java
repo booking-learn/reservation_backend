@@ -55,6 +55,10 @@ class AccountServiceTest {
 		accountService = new AccountServiceImpl(accountRepository, passwordEncoder);
 	}
 	@Test
+	void givenNullAccount_thenThrowException() {
+		assertThrows(IllegalArgumentException.class, () -> accountService.save(null));
+	}
+	@Test
 	void givenWhenValidOldEmail_thenUpdateEmail() {
 		doReturn(uuid).when(account).getId();
 		doReturn(OLD_EMAIL).when(account).getEmail();

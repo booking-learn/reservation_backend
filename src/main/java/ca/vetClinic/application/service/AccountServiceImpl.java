@@ -37,6 +37,9 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public void save(Account account) {
+		if (account == null) {
+			throw new IllegalArgumentException("Account is null");
+		}
 		accountRepository.save(account);
 	}
 

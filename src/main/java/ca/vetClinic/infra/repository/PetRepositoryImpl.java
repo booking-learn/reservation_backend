@@ -44,12 +44,6 @@ public class PetRepositoryImpl implements PetRepository {
 	}
 
 	@Override
-	public Pet findByUserId(UUID userId) {
-		return jpaRepository.findByUserId(userId).map(mapper::toDomain)
-				.orElseThrow(() -> new NotFoundException("userId"));
-	}
-
-	@Override
 	public List<Pet> findAllByUserId(UUID userId) {
 		return jpaRepository.findAllByUserId(userId).stream().map(mapper::toDomain).toList();
 	}
