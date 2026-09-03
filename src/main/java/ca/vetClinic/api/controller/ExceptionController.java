@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -36,7 +37,13 @@ public class ExceptionController {
 	}
 	@ExceptionHandler
 	public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException ex) {
-		ErrorResponse error = new ErrorResponse(ex.getMessage(), System.currentTimeMillis());
+        String message = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(FieldError::getDefaultMessage)
+                .findFirst()
+                .orElse("validation error");
+		ErrorResponse error = new ErrorResponse(message, System.currentTimeMillis());
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 	@ExceptionHandler
