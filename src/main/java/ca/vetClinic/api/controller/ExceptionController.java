@@ -37,12 +37,8 @@ public class ExceptionController {
 	}
 	@ExceptionHandler
 	public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException ex) {
-        String message = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(FieldError::getDefaultMessage)
-                .findFirst()
-                .orElse("validation error");
+		String message = ex.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage).findFirst()
+				.orElse("validation error");
 		ErrorResponse error = new ErrorResponse(message, System.currentTimeMillis());
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
