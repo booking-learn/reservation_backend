@@ -11,6 +11,7 @@ import ca.vetClinic.domain.service.PetService;
 import ca.vetClinic.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -97,6 +98,7 @@ public class PetServiceImpl implements PetService {
 		petRepository.deleteById(id);
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public void deleteByOwnerEmail(String email) {
 		validateEmail(email);

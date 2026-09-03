@@ -17,7 +17,6 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,7 +33,6 @@ class PetRepositoryTest extends AbstractContainerBase {
 	private String BREED = null;
 	private String GENDER = "MALE";
 	private final String EMAIL = "jacob@gmail.com";
-	private final String OTHER_EMAIL = "other@email.com";
 	private final String PASSWORD = "qwerty";
 	private final String FIRST_NAME = "Jacob";
 	private final String LAST_NAME = "Tremblay";
