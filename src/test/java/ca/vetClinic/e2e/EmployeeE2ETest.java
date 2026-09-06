@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class EmployeeTest extends BaseE2ETest {
+public class EmployeeE2ETest extends BaseE2ETest {
 
 	private static final UUID SEEDED_EMPLOYEE_ID = UUID.fromString("22222222-2222-2222-2222-222222222222");
 	private static final String SEEDED_EMPLOYEE_EMAIL = "it.employee@vetclinic.test";
@@ -78,6 +78,7 @@ public class EmployeeTest extends BaseE2ETest {
 				.getContentAsString();
 		return jsonMapper.readValue(body, AuthResponse.class).accessToken();
 	}
+
 	@Nested
 	class Create {
 
@@ -93,6 +94,7 @@ public class EmployeeTest extends BaseE2ETest {
 							}
 							""")).andExpect(status().isCreated());
 		}
+
 		@Test
 		void givenItAdmin_whenCreateEmployee_thenReturnPassword() throws Exception {
 			mockMvc.perform(post("/employees").header("Authorization", "Bearer " + itAdminToken)

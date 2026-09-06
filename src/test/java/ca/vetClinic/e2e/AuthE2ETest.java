@@ -150,7 +150,7 @@ public class AuthE2ETest extends BaseE2ETest {
 
 			mockMvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON)
 					.content(jsonMapper.writeValueAsString(loginReq))).andExpect(status().isBadRequest())
-					.andExpect(jsonPath("$.token").doesNotExist());
+					.andExpect(jsonPath("$.accessToken").doesNotExist());
 		}
 
 		@Test
@@ -159,9 +159,10 @@ public class AuthE2ETest extends BaseE2ETest {
 
 			mockMvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON)
 					.content(jsonMapper.writeValueAsString(loginReq))).andExpect(status().isUnauthorized())
-					.andExpect(jsonPath("$.token").doesNotExist());
+					.andExpect(jsonPath("$.accessToken").doesNotExist());
 		}
 	}
+
 	private void seedDatabase() {
 		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
 		populator.addScript(new ClassPathResource("sql/CreateItAdmin.sql"));
@@ -218,6 +219,7 @@ public class AuthE2ETest extends BaseE2ETest {
 					}
 					""".formatted(employeeCreatedEmail, employeeCreatedPassword))).andExpect(status().isForbidden());
 		}
+
 		@Nested
 		class PasswordChanged {
 			@BeforeEach
@@ -231,6 +233,7 @@ public class AuthE2ETest extends BaseE2ETest {
 						""".formatted(employeeCreatedEmail, employeeCreatedPassword, NEW_PASSWORD)))
 						.andExpect(status().isNoContent());
 			}
+
 			@Test
 			void givenPasswordChanged_thenLoginSuccess() throws Exception {
 				LoginReq loginReq = new LoginReq(employeeCreatedEmail, NEW_PASSWORD);

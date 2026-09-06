@@ -20,6 +20,12 @@ public class AccountServiceImpl implements AccountService {
 
 	private final AccountRepository accountRepository;
 	private final PasswordEncoder passwordEncoder;
+
+	private void validateNotNull(String variable, String name) {
+		if (variable == null) {
+			throw new IllegalArgumentException(name + "is null");
+		}
+	}
 	@Override
 	public List<Account> findAll() {
 		return accountRepository.findAll();
@@ -45,11 +51,13 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public Account findByEmail(String email) {
+		validateNotNull(email, "email");
 		return accountRepository.findByEmail(email);
 	}
 
 	@Override
 	public boolean existsByEmail(String email) {
+		validateNotNull(email, "email");
 		return accountRepository.existsByEmail(email);
 	}
 
@@ -72,5 +80,12 @@ public class AccountServiceImpl implements AccountService {
 		account.setPassword(passwordEncoder.encode(cmd.newPassword()));
 		account.setMustChangePassword(false);
 		accountRepository.save(account);
+	}
+
+	@Override
+	public boolean isMustChangePassword(String email) {
+		validateNotNull(email, "email");
+		Account account = accountRepository.findByEmail(email);
+		return account.isMustChangePassword();
 	}
 }

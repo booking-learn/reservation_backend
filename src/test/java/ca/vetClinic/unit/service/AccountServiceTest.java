@@ -98,4 +98,17 @@ class AccountServiceTest {
 		assertThrows(BadCredentialsException.class,
 				() -> accountService.updatePassword(uuid, invalidUpdatePasswordCmd));
 	}
+	@Test
+	void givenWhenIsMustChangePasswordIsTrue_thenReturnTrue() {
+		doReturn(true).when(account).isMustChangePassword();
+		when(accountRepository.findByEmail(OLD_EMAIL)).thenReturn(account);
+		boolean response = accountService.isMustChangePassword(OLD_EMAIL);
+		assertTrue(response);
+	}
+	@Test
+    void givenWhenIsMustChangePasswordIsFalse_thenReturnFalse() {
+        when(accountRepository.findByEmail(OLD_EMAIL)).thenReturn(account);
+        boolean response=accountService.isMustChangePassword(OLD_EMAIL);
+        assertFalse(response);
+    }
 }

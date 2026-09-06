@@ -23,4 +23,6 @@ public interface AccountService {
 	void updateEmail(UUID id, UpdateEmailCmd cmd);
 
 	void updatePassword(UUID id, UpdatePasswordCmd cmd);
+
+	boolean isMustChangePassword(String email);
 }

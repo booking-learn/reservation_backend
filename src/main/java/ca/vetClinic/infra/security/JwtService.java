@@ -1,5 +1,6 @@
 package ca.vetClinic.infra.security;
 
+import ca.vetClinic.domain.enumerator.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -16,12 +17,12 @@ public class JwtService {
 
 	private final JwtProperties jwtProperties;
 
-	public String generateToken(UserPrincipal userPrincipal) {
+	public String generateToken(String email, Role role) {
 		long now = System.currentTimeMillis();
 		long expiryMillis = now + jwtProperties.getExpiration();
 
-		return Jwts.builder().subject(userPrincipal.getEmail()).claim("role", userPrincipal.getRole().name())
-				.issuedAt(new Date(now)).expiration(new Date(expiryMillis)).signWith(getSigningKey()).compact();
+		return Jwts.builder().subject(email).claim("role", role.name()).issuedAt(new Date(now))
+				.expiration(new Date(expiryMillis)).signWith(getSigningKey()).compact();
 	}
 
 	public String extractUsername(String token) {
