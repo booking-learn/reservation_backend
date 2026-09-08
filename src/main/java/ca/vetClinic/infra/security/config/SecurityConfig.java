@@ -1,5 +1,6 @@
-package ca.vetClinic.infra.security;
+package ca.vetClinic.infra.security.config;
 
+import ca.vetClinic.infra.security.jwt.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

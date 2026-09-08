@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -35,14 +36,19 @@ public class BookingEntity {
 	@CreationTimestamp
 	@Column(name = "booking_created_at", nullable = false, updatable = false)
 	private Instant bookingCreatedAt;
+	@UpdateTimestamp
+	@Column(name = "booking_updated_at", nullable = false)
+	private Instant bookingUpdatedAt;
 
-	public BookingEntity(UUID userId, UUID serviceId, UUID petId, UUID timeSlotId, String status, String notes) {
+	public BookingEntity(UUID userId, UUID vetId, UUID serviceId, UUID petId, UUID timeSlotId, String status,
+			String notes) {
 		this.userId = userId;
 		this.serviceId = serviceId;
 		this.petId = petId;
 		this.timeSlotId = timeSlotId;
 		this.status = status;
 		this.notes = notes;
+		this.veterinarianId = vetId;
 	}
 
 	public BookingEntity() {

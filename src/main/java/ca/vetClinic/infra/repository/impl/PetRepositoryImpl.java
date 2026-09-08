@@ -1,4 +1,4 @@
-package ca.vetClinic.infra.repository;
+package ca.vetClinic.infra.repository.impl;
 
 import ca.vetClinic.domain.exception.NotFoundException;
 import ca.vetClinic.domain.model.Pet;

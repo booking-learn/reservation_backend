@@ -1,4 +1,4 @@
-package ca.vetClinic.infra.repository;
+package ca.vetClinic.infra.repository.impl;
 
 import ca.vetClinic.domain.exception.NotFoundException;
 import ca.vetClinic.domain.model.Account;
@@ -6,8 +6,6 @@ import ca.vetClinic.domain.repository.AccountRepository;
 import ca.vetClinic.infra.entity.AccountEntity;
 import ca.vetClinic.infra.mapper.AccountMapper;
 import ca.vetClinic.infra.repository.jpa.AccountJpaRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

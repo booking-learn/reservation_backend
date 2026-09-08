@@ -1,4 +1,4 @@
-package ca.vetClinic.infra.security;
+package ca.vetClinic.infra.security.jwt;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package ca.vetClinic.infra.security;
+package ca.vetClinic.infra.security.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

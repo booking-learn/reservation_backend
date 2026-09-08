@@ -1,0 +1,1 @@
+ALTER TABLE bookings ADD COLUMN `booking_updated_at` TIMESTAMP NOT NULL;

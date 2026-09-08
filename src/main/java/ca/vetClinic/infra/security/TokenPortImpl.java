@@ -2,6 +2,8 @@ package ca.vetClinic.infra.security;
 
 import ca.vetClinic.domain.enumerator.Role;
 import ca.vetClinic.domain.port.TokenPort;
+import ca.vetClinic.infra.security.jwt.JwtProperties;
+import ca.vetClinic.infra.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

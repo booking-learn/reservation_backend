@@ -1,12 +1,10 @@
-package ca.vetClinic.infra.repository;
+package ca.vetClinic.infra.repository.impl;
 
 import ca.vetClinic.domain.exception.NotFoundException;
 import ca.vetClinic.domain.model.User;
 import ca.vetClinic.domain.repository.UserRepository;
-import ca.vetClinic.infra.entity.AccountEntity;
 import ca.vetClinic.infra.entity.UserEntity;
 import ca.vetClinic.infra.mapper.UserMapper;
-import ca.vetClinic.infra.repository.jpa.AccountJpaRepository;
 import ca.vetClinic.infra.repository.jpa.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

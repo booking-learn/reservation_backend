@@ -1,4 +1,4 @@
-package ca.vetClinic.infra.security;
+package ca.vetClinic.infra.security.jwt;
 
 import ca.vetClinic.domain.enumerator.Role;
 import io.jsonwebtoken.Claims;
